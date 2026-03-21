@@ -6,20 +6,14 @@ from pathlib import Path
 from typing import List
 
 
-def generate_random_strings(n: int, length: int=12) -> List[str]:
+def generate_random_strings(n: int, length: int = 12) -> List[str]:
     alphabet = string.ascii_lowercase + string.digits
-    return [
-        "".join(random.choices(alphabet, k=length))
-        for _ in range(n)
-    ]
+    return ["".join(random.choices(alphabet, k=length)) for _ in range(n)]
 
 
-def generate_dna_sequences(n: int, length: int=40) -> List[str]:
+def generate_dna_sequences(n: int, length: int = 40) -> List[str]:
     alphabet = "ACGT"
-    return [
-        "".join(random.choices(alphabet, k=length))
-        for _ in range(n)
-    ]
+    return ["".join(random.choices(alphabet, k=length)) for _ in range(n)]
 
 
 def save_lines(path: Path, data: List[str]) -> None:

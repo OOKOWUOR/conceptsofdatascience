@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 
-def make_plot(df: pd.DataFrame, x: str, y: str, title: str, outpath: Path) -> None:
+def make_plot(
+    df: pd.DataFrame, x: str, y: str, title: str, outpath: Path
+) -> None:
     plt.figure(figsize=(8, 5))
 
     for dataset in sorted(df["dataset"].unique()):

@@ -7,8 +7,10 @@ import string
 from ..src.bloom_filter import BloomFilter
 
 
-def random_string(length: int=12):
-    return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
+def random_string(length: int = 12):
+    return "".join(
+        random.choices(string.ascii_lowercase + string.digits, k=length)
+    )
 
 
 class TestBloomFilter(unittest.TestCase):

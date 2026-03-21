@@ -7,7 +7,9 @@ import math
 
 
 class BloomFilter:
-    def __init__(self, expected_items: int, false_positive_rate: float) -> None:
+    def __init__(
+        self, expected_items: int, false_positive_rate: float
+    ) -> None:
         if expected_items <= 0:
             raise ValueError("expected_items must be > 0")
         if not (0 < false_positive_rate < 1):
@@ -16,7 +18,9 @@ class BloomFilter:
         self.expected_items = expected_items
         self.false_positive_rate = false_positive_rate
 
-        self.m = self._optimal_bit_array_size(expected_items, false_positive_rate)
+        self.m = self._optimal_bit_array_size(
+            expected_items, false_positive_rate
+        )
         self.k = self._optimal_hash_count(self.m, expected_items)
 
         self.bit_array = bytearray(math.ceil(self.m / 8))
@@ -46,7 +50,7 @@ class BloomFilter:
     def _set_bit(self, index: int) -> None:
         byte_index = index // 8
         bit_index = index % 8
-        self.bit_array[byte_index] |= (1 << bit_index)
+        self.bit_array[byte_index] |= 1 << bit_index
 
     def _get_bit(self, index: int) -> int:
         byte_index = index // 8
