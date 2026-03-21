@@ -4,7 +4,7 @@ import unittest
 import random
 import string
 
-from ..src.bloom_filter import BloomFilter
+from bloom_filter import BloomFilter
 
 
 def random_string(length: int = 12):

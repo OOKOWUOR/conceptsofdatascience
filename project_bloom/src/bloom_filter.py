@@ -12,7 +12,7 @@ class BloomFilter:
     ) -> None:
         if expected_items <= 0:
             raise ValueError("expected_items must be > 0")
-        if not (0 < false_positive_rate < 1):
+        if not 0 < false_positive_rate < 1:
             raise ValueError("false_positive_rate must be between 0 and 1")
 
         self.expected_items = expected_items

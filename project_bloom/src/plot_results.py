@@ -1,8 +1,8 @@
 # plot_results.py
 
+from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
-from pathlib import Path
 
 
 def make_plot(
@@ -27,10 +27,10 @@ if __name__ == "__main__":
     HERE = Path(__file__).resolve()
     PROJECT_ROOT = HERE.parent.parent
 
-    df = pd.read_csv(PROJECT_ROOT / "results/benchmark_results.csv")
+    data = pd.read_csv(PROJECT_ROOT / "results/benchmark_results.csv")
 
     make_plot(
-        df,
+        data,
         "n_inserted",
         "insert_time_sec",
         "Insertion time vs inserted items",
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     )
 
     make_plot(
-        df,
+        data,
         "n_inserted",
         "present_search_time_sec",
         "Lookup time (present) vs inserted items",
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     )
 
     make_plot(
-        df,
+        data,
         "n_inserted",
         "absent_search_time_sec",
         "Lookup time (absent) vs inserted items",
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     )
 
     make_plot(
-        df,
+        data,
         "n_inserted",
         "observed_false_positive_rate",
         "Observed false positive rate vs inserted items",
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     )
 
     make_plot(
-        df,
+        data,
         "n_inserted",
         "theoretical_false_positive_rate",
         "Theoretical false positive rate vs inserted items",
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     )
 
     make_plot(
-        df,
+        data,
         "n_inserted",
         "bits_per_item",
         "Bits per item vs inserted items",

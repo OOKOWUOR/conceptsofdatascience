@@ -25,7 +25,7 @@ def benchmark_dataset(
     data = data[: max_n * 2]
 
     inserted = data[:max_n]
-    negatives = data[max_n : max_n * 2]
+    negatives = data[max_n: max_n * 2]
 
     inserted_so_far = 0
 
@@ -72,11 +72,11 @@ def benchmark_dataset(
     return results
 
 
-def save_results(path: Path, rows: List[Dict[str, Any]]) -> None:
+def save_results(path: Path, values: List[Dict[str, Any]]) -> None:
     with open(path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=rows[0].keys())
+        writer = csv.DictWriter(f, fieldnames=values[0].keys())
         writer.writeheader()
-        writer.writerows(rows)
+        writer.writerows(values)
 
 
 if __name__ == "__main__":
