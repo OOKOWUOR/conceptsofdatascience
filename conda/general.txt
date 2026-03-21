@@ -1,0 +1,11 @@
+name: CODS26
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - matplotlib
+  - pandas
+  - wheel
+  - setuptools
+  - pandas-stubs
+prefix: C:\Users\SaidDeWolf\anaconda3\envs\CODS26
