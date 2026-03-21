@@ -4,19 +4,20 @@ import time
 import random
 import csv
 from pathlib import Path
+from typing import List, Dict, Any
 
 from bloom_filter import BloomFilter
 
 
-def load_data(path):
-    return Path(path).read_text(encoding="utf-8").splitlines()
+def load_data(path: Path) -> List[str]:
+    return path.read_text(encoding="utf-8").splitlines()
 
 
-def benchmark_dataset(name, data, expected_items=100000, fpr=0.01):
+def benchmark_dataset(name: str, data: List[str], expected_items: int=100000, fpr: float=0.01) -> List[Dict[str, Any]]:
     bf = BloomFilter(expected_items, fpr)
 
     steps = [1000, 5000, 10000, 25000, 50000, 100000]
-    results = []
+    results: List[Dict[str, Any]] = []
 
     max_n = max(steps)
     data = data[:max_n * 2]
@@ -67,7 +68,7 @@ def benchmark_dataset(name, data, expected_items=100000, fpr=0.01):
     return results
 
 
-def save_results(path, rows):
+def save_results(path: Path, rows: List[Dict[str, Any]]) -> None:
     with open(path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=rows[0].keys())
         writer.writeheader()
@@ -75,16 +76,18 @@ def save_results(path, rows):
 
 
 if __name__ == "__main__":
+    HERE = Path(__file__).resolve()
+    PROJECT_ROOT = HERE.parent.parent
+
     random.seed(42)
-    Path("results").mkdir(exist_ok=True)
 
-    random_data = load_data("data/random_strings.txt")
-    dna_data = load_data("data/dna_sequences.txt")
+    random_data = load_data(PROJECT_ROOT / "data/random_strings.txt")
+    dna_data = load_data(PROJECT_ROOT / "data/dna_sequences.txt")
 
-    rows = []
+    rows: List[Dict[str, Any]] = []
     rows.extend(benchmark_dataset("random", random_data))
     rows.extend(benchmark_dataset("dna", dna_data))
 
-    save_results("results/benchmark_results.csv", rows)
+    save_results(PROJECT_ROOT / "results/benchmark_results.csv", rows)
 
     print("Benchmark done.")

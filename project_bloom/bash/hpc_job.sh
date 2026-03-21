@@ -10,8 +10,8 @@ echo "Starting Bloom filter job"
 
 module load Python/3.11.5
 
-python generate_data.py
-python benchmark.py
-python plot_results.py
+python src/generate_data.py
+python src/benchmark.py
+python src/plot_results.py
 
 echo "Job finished"

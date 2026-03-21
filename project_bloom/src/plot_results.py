@@ -2,13 +2,14 @@
 
 import pandas as pd
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 
-def make_plot(df, x, y, title, outpath):
+def make_plot(df: pd.DataFrame, x: str, y: str, title: str, outpath: Path) -> None:
     plt.figure(figsize=(8, 5))
 
     for dataset in sorted(df["dataset"].unique()):
-        subset = df[df["dataset"] == dataset]
+        subset: pd.DataFrame = df[df["dataset"] == dataset]
         plt.plot(subset[x], subset[y], marker="o", label=dataset)
 
     plt.xlabel(x)
@@ -21,14 +22,17 @@ def make_plot(df, x, y, title, outpath):
 
 
 if __name__ == "__main__":
-    df = pd.read_csv("results/benchmark_results.csv")
+    HERE = Path(__file__).resolve()
+    PROJECT_ROOT = HERE.parent.parent
+
+    df = pd.read_csv(PROJECT_ROOT / "results/benchmark_results.csv")
 
     make_plot(
         df,
         "n_inserted",
         "insert_time_sec",
         "Insertion time vs inserted items",
-        "results/insert_time.png",
+        PROJECT_ROOT / "results/insert_time.png",
     )
 
     make_plot(
@@ -36,7 +40,7 @@ if __name__ == "__main__":
         "n_inserted",
         "present_search_time_sec",
         "Lookup time (present) vs inserted items",
-        "results/search_present_time.png",
+        PROJECT_ROOT / "results/search_present_time.png",
     )
 
     make_plot(
@@ -44,7 +48,7 @@ if __name__ == "__main__":
         "n_inserted",
         "absent_search_time_sec",
         "Lookup time (absent) vs inserted items",
-        "results/search_absent_time.png",
+        PROJECT_ROOT / "results/search_absent_time.png",
     )
 
     make_plot(
@@ -52,7 +56,7 @@ if __name__ == "__main__":
         "n_inserted",
         "observed_false_positive_rate",
         "Observed false positive rate vs inserted items",
-        "results/observed_fpr.png",
+        PROJECT_ROOT / "results/observed_fpr.png",
     )
 
     make_plot(
@@ -60,7 +64,7 @@ if __name__ == "__main__":
         "n_inserted",
         "theoretical_false_positive_rate",
         "Theoretical false positive rate vs inserted items",
-        "results/theoretical_fpr.png",
+        PROJECT_ROOT / "results/theoretical_fpr.png",
     )
 
     make_plot(
@@ -68,7 +72,7 @@ if __name__ == "__main__":
         "n_inserted",
         "bits_per_item",
         "Bits per item vs inserted items",
-        "results/bits_per_item.png",
+        PROJECT_ROOT / "results/bits_per_item.png",
     )
 
     print("Plots saved in results/.")

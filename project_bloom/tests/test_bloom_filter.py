@@ -4,10 +4,10 @@ import unittest
 import random
 import string
 
-from bloom_filter import BloomFilter
+from ..src.bloom_filter import BloomFilter
 
 
-def random_string(length=12):
+def random_string(length: int=12):
     return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
 
 
