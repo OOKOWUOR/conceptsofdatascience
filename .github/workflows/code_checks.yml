@@ -1,0 +1,50 @@
+name: Code checks
+
+on:
+  pull_request:
+    branches:
+      - main  # run on PRs targeting main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Set up Miniconda
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          python-version: 3.11
+          environment-file: project_bloom/conda/general.yml
+          activate-environment: CODS26
+          use-mamba: true
+
+      # Cache conda env
+      - uses: actions/cache@v3
+        with:
+          path: ~/.conda/pkgs
+          key: ${{ runner.os }}-conda-${{ hashFiles('project_bloom/conda/general.yml') }}
+      
+      # Check presence of packages
+      - name: Debug Conda env
+        run: |
+          conda info --envs
+          conda run -n CODS26 which python
+          conda run -n CODS26 which pytest
+          conda run -n CODS26 pip list
+
+      # Run tests
+      - name: Pytest
+        run: |
+          export PYTHONPATH=$PWD/project_bloom/src:$PYTHONPATH
+          conda run -n CODS26 pytest project_bloom/tests/
+      # - name: flake8
+      #   run: |
+      #     export PYTHONPATH=$PWD/project_bloom/src:$PYTHONPATH
+      #     conda run -n CODS26 flake8 project_bloom/
+      - name: mypy
+        run: |
+          export PYTHONPATH=$PWD/project_bloom/src:$PYTHONPATH
+          conda run -n CODS26 -- mypy --ignore-missing-imports project_bloom/

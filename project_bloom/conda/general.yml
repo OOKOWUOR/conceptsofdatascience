@@ -8,4 +8,6 @@ dependencies:
   - wheel
   - setuptools
   - pandas-stubs
-prefix: C:\Users\SaidDeWolf\anaconda3\envs\CODS26
+  - pytest
+  - flake8
+  - mypy
