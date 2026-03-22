@@ -7,10 +7,7 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Sequence, Tuple
 
-try:
-    from .bloom_filter import BloomFilter
-except ImportError:
-    from bloom_filter import BloomFilter
+from bloom_filter import BloomFilter
 
 BENCHMARK_STEPS = [1000, 5000, 10000, 25000, 50000, 100000]
 RANDOM_SEED = 42
