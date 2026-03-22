@@ -1,5 +1,5 @@
 # plot_results.py
-
+"""Utility script to generate plots from benchmark results."""
 from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 def make_plot(
     df: pd.DataFrame, x: str, y: str, title: str, outpath: Path
 ) -> None:
+    """Generate and save a line plot for a given dataset and metrics."""
     plt.figure(figsize=(8, 5))
 
     for dataset in sorted(df["dataset"].unique()):
