@@ -4,10 +4,7 @@ import random
 import string
 import unittest
 
-try:
-    from src.bloom_filter import BloomFilter
-except ImportError:
-    from bloom_filter import BloomFilter
+from bloom_filter import BloomFilter
 
 
 def random_string(length: int = 12) -> str:
