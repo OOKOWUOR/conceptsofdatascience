@@ -1,0 +1,13 @@
+name: CODS26
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - matplotlib
+  - pandas
+  - wheel
+  - setuptools
+  - pandas-stubs
+  - pytest
+  - flake8
+  - mypy
