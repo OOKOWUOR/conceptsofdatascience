@@ -1,57 +1,68 @@
-# test_bloom_filter.py
+"""Unit tests for the BloomFilter implementation."""
 
-import unittest
 import random
 import string
+import unittest
 
 from bloom_filter import BloomFilter
 
+RANDOM_SEED = 42
 
-def random_string(length: int = 12):
+
+def random_string(length: int = 12) -> str:
+    """Generate a random lowercase alphanumeric string."""
     return "".join(
         random.choices(string.ascii_lowercase + string.digits, k=length)
     )
 
 
 class TestBloomFilter(unittest.TestCase):
+    """Test cases for BloomFilter behavior."""
 
-    def test_insert_and_lookup(self):
-        bf = BloomFilter(1000, 0.01)
+    def test_insert_and_lookup(self) -> None:
+        """Ensure inserted items are found in the filter."""
+        bloom_filter = BloomFilter(1000, 0.01)
         items = ["apple", "banana", "cherry"]
 
         for item in items:
-            bf.add(item)
+            bloom_filter.add(item)
 
         for item in items:
-            self.assertTrue(bf.contains(item))
+            self.assertTrue(bloom_filter.contains(item))
 
-    def test_no_false_negatives(self):
-        bf = BloomFilter(1000, 0.01)
+    def test_no_false_negatives(self) -> None:
+        """Ensure inserted items do not produce false negatives."""
+        random.seed(RANDOM_SEED)
+        bloom_filter = BloomFilter(1000, 0.01)
         items = [random_string() for _ in range(500)]
 
         for item in items:
-            bf.add(item)
+            bloom_filter.add(item)
 
         for item in items:
-            self.assertTrue(item in bf)
+            self.assertTrue(item in bloom_filter)
 
-    def test_false_positive_rate(self):
-        bf = BloomFilter(5000, 0.01)
+    def test_false_positive_rate(self) -> None:
+        """Check that the observed false positive rate stays acceptable."""
+        random.seed(RANDOM_SEED)
+        bloom_filter = BloomFilter(5000, 0.01)
 
         inserted = {random_string() for _ in range(5000)}
         for item in inserted:
-            bf.add(item)
+            bloom_filter.add(item)
 
         trials = 2000
         false_positives = 0
 
         for _ in range(trials):
-            x = random_string()
-            if x not in inserted and x in bf:
+            candidate = random_string()
+            if candidate not in inserted and candidate in bloom_filter:
                 false_positives += 1
 
         observed = false_positives / trials
-        self.assertLess(observed, 0.03)
+        self.assertLess(
+            observed, bloom_filter.theoretical_false_positive_rate() * 1.05
+        )
 
 
 if __name__ == "__main__":
