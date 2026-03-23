@@ -43,31 +43,21 @@ def _time_insertions(bloom_filter: BloomFilter, items: Sequence[str]) -> float:
     return time.perf_counter() - start
 
 
-def _time_present_searches(
-    bloom_filter: BloomFilter, items: Sequence[str]
-) -> float:
-    """Measure the time taken to search for present items."""
-    start = time.perf_counter()
-    for item in items:
-        bloom_filter.contains(item)
-    return time.perf_counter() - start
-
-
-def _measure_absent_searches(
+def _measure_searches(
     bloom_filter: BloomFilter, items: Sequence[str]
 ) -> Dict[str, float]:
-    """Measure absent-item search time and false positive rate."""
-    false_positives = 0
+    """Measure search time and number of positive matches."""
+    positives = 0
 
     start = time.perf_counter()
     for item in items:
         if bloom_filter.contains(item):
-            false_positives += 1
+            positives += 1
     elapsed = time.perf_counter() - start
 
     return {
-        "absent_search_time_sec": elapsed,
-        "observed_false_positive_rate": false_positives / len(items),
+        "search_time_sec": elapsed,
+        "positives": positives,
     }
 
 
@@ -89,6 +79,7 @@ def _build_result_row(
     name: str,
     inserted_count: int,
     timing_metrics: Dict[str, float],
+    present_metrics: Dict[str, float],
     absent_metrics: Dict[str, float],
     filter_metrics: Dict[str, float],
 ) -> Dict[str, Any]:
@@ -97,11 +88,12 @@ def _build_result_row(
         "dataset": name,
         "n_inserted": inserted_count,
         "insert_time_sec": timing_metrics["insert_time_sec"],
-        "present_search_time_sec": timing_metrics["present_search_time_sec"],
-        "absent_search_time_sec": absent_metrics["absent_search_time_sec"],
-        "observed_false_positive_rate": absent_metrics[
-            "observed_false_positive_rate"
-        ],
+        "present_search_time_sec": present_metrics["search_time_sec"],
+        "absent_search_time_sec": absent_metrics["search_time_sec"],
+        "false_negatives": inserted_count - int(present_metrics["positives"]),
+        "observed_false_positive_rate": (
+            absent_metrics["positives"] / inserted_count
+        ),
         "theoretical_false_positive_rate": filter_metrics[
             "theoretical_false_positive_rate"
         ],
@@ -128,11 +120,9 @@ def _benchmark_step(
 
     timing_metrics = {
         "insert_time_sec": _time_insertions(bloom_filter, new_items),
-        "present_search_time_sec": _time_present_searches(
-            bloom_filter, present_items
-        ),
     }
-    absent_metrics = _measure_absent_searches(bloom_filter, negatives[:step])
+    present_metrics = _measure_searches(bloom_filter, present_items)
+    absent_metrics = _measure_searches(bloom_filter, negatives[:step])
     filter_metrics = _collect_filter_metrics(bloom_filter, step)
 
     dataset_parts["inserted_so_far"] = step
@@ -141,6 +131,7 @@ def _benchmark_step(
         name,
         step,
         timing_metrics,
+        present_metrics,
         absent_metrics,
         filter_metrics,
     )
