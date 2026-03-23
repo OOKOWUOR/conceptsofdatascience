@@ -31,7 +31,7 @@ def _prepare_dataset_slices(
             )
         )
     inserted = list(data[:max_n])
-    negatives = list(data[max_n : max_n * 2])
+    negatives = list(data[max_n:max_n * 2])
     return inserted, negatives
 
 
