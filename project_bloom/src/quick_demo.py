@@ -1,5 +1,5 @@
 # quick_demo.py
-
+"""Quick demonstration of the Bloom filter implementation."""
 from bloom_filter import BloomFilter
 
 if __name__ == "__main__":
