@@ -18,12 +18,20 @@ def load_data(path: Path) -> List[str]:
     return path.read_text(encoding="utf-8").splitlines()
 
 
-def _prepare_dataset_slices(data: Sequence[str]) -> Tuple[List[str], List[str]]:
+def _prepare_dataset_slices(
+    data: Sequence[str],
+) -> Tuple[List[str], List[str]]:
     """Prepare inserted and negative samples for benchmarking."""
     max_n = max(BENCHMARK_STEPS)
-    trimmed_data = list(data[: max_n * 2])
-    inserted = trimmed_data[:max_n]
-    negatives = trimmed_data[max_n : max_n * 2]
+    if len(data) < max_n * 2:
+        raise ValueError(
+            (
+                f"data must be at least of size {max_n*2},",
+                f" but is of size {len(data)}",
+            )
+        )
+    inserted = list(data[:max_n])
+    negatives = list(data[max_n:max_n * 2])
     return inserted, negatives
 
 
@@ -109,7 +117,8 @@ def _benchmark_step(
     dataset_parts: Dict[str, Any],
     step: int,
 ) -> Tuple[Dict[str, Any], int]:
-    """Run one benchmark step and return the result row and new insertion index."""
+    """Run one benchmark step and return the result row and
+    the new insertion index."""
     inserted = dataset_parts["inserted"]
     negatives = dataset_parts["negatives"]
     inserted_so_far = dataset_parts["inserted_so_far"]
