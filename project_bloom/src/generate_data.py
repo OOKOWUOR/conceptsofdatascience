@@ -1,5 +1,5 @@
 # generate_data.py
-
+"""Utility script to generate datasets for benchmarking the Bloom filter implementation."""
 import random
 import string
 from pathlib import Path
@@ -7,16 +7,19 @@ from typing import List
 
 
 def generate_random_strings(n: int, length: int = 12) -> List[str]:
+    """Generate a list of random alphanumeric strings."""
     alphabet = string.ascii_lowercase + string.digits
     return ["".join(random.choices(alphabet, k=length)) for _ in range(n)]
 
 
 def generate_dna_sequences(n: int, length: int = 40) -> List[str]:
+    """Generate a list of random DNA sequences."""
     alphabet = "ACGT"
     return ["".join(random.choices(alphabet, k=length)) for _ in range(n)]
 
 
 def save_lines(path: Path, data: List[str]) -> None:
+    """Save a list of strings to a file, one per line."""
     path.write_text("\n".join(data), encoding="utf-8")
 
 
