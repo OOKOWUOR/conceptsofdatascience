@@ -6,6 +6,8 @@ import unittest
 
 from bloom_filter import BloomFilter
 
+RANDOM_SEED = 42
+
 
 def random_string(length: int = 12) -> str:
     """Generate a random lowercase alphanumeric string."""
@@ -30,6 +32,7 @@ class TestBloomFilter(unittest.TestCase):
 
     def test_no_false_negatives(self) -> None:
         """Ensure inserted items do not produce false negatives."""
+        random.seed(RANDOM_SEED)
         bloom_filter = BloomFilter(1000, 0.01)
         items = [random_string() for _ in range(500)]
 
@@ -41,6 +44,7 @@ class TestBloomFilter(unittest.TestCase):
 
     def test_false_positive_rate(self) -> None:
         """Check that the observed false positive rate stays acceptable."""
+        random.seed(RANDOM_SEED)
         bloom_filter = BloomFilter(5000, 0.01)
 
         inserted = {random_string() for _ in range(5000)}
@@ -56,7 +60,9 @@ class TestBloomFilter(unittest.TestCase):
                 false_positives += 1
 
         observed = false_positives / trials
-        self.assertLess(observed, 0.03)
+        self.assertLess(
+            observed, bloom_filter.theoretical_false_positive_rate() * 1.05
+        )
 
 
 if __name__ == "__main__":
