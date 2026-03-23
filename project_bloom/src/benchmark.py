@@ -1,97 +1,198 @@
 # benchmark.py
+"""Benchmarking script for the Bloom filter implementation."""
 
-import time
-import random
 import csv
+import random
+import time
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any, Dict, List, Sequence, Tuple
 
 from bloom_filter import BloomFilter
 
+BENCHMARK_STEPS = [1000, 5000, 10000, 25000, 50000, 100000]
+RANDOM_SEED = 42
+
 
 def load_data(path: Path) -> List[str]:
+    """Load data from a text file, returning a list of lines."""
     return path.read_text(encoding="utf-8").splitlines()
+
+
+def _prepare_dataset_slices(
+    data: Sequence[str],
+) -> Tuple[List[str], List[str]]:
+    """Prepare inserted and negative samples for benchmarking."""
+    max_n = max(BENCHMARK_STEPS)
+    if len(data) < max_n * 2:
+        raise ValueError(
+            (
+                f"data must be at least of size {max_n*2},",
+                f" but is of size {len(data)}",
+            )
+        )
+    inserted = list(data[:max_n])
+    negatives = list(data[max_n:max_n * 2])
+    return inserted, negatives
+
+
+def _time_insertions(bloom_filter: BloomFilter, items: Sequence[str]) -> float:
+    """Measure the time taken to insert items into the Bloom filter."""
+    start = time.perf_counter()
+    for item in items:
+        bloom_filter.add(item)
+    return time.perf_counter() - start
+
+
+def _time_present_searches(
+    bloom_filter: BloomFilter, items: Sequence[str]
+) -> float:
+    """Measure the time taken to search for present items."""
+    start = time.perf_counter()
+    for item in items:
+        bloom_filter.contains(item)
+    return time.perf_counter() - start
+
+
+def _measure_absent_searches(
+    bloom_filter: BloomFilter, items: Sequence[str]
+) -> Dict[str, float]:
+    """Measure absent-item search time and false positive rate."""
+    false_positives = 0
+
+    start = time.perf_counter()
+    for item in items:
+        if bloom_filter.contains(item):
+            false_positives += 1
+    elapsed = time.perf_counter() - start
+
+    return {
+        "absent_search_time_sec": elapsed,
+        "observed_false_positive_rate": false_positives / len(items),
+    }
+
+
+def _collect_filter_metrics(
+    bloom_filter: BloomFilter, inserted_count: int
+) -> Dict[str, float]:
+    """Collect Bloom filter metrics for a benchmark step."""
+    return {
+        "theoretical_false_positive_rate": (
+            bloom_filter.theoretical_false_positive_rate()
+        ),
+        "memory_bytes": bloom_filter.memory_bytes(),
+        "fill_ratio": bloom_filter.fill_ratio(),
+        "bits_per_item": bloom_filter.m / inserted_count,
+    }
+
+
+def _build_result_row(
+    name: str,
+    inserted_count: int,
+    timing_metrics: Dict[str, float],
+    absent_metrics: Dict[str, float],
+    filter_metrics: Dict[str, float],
+) -> Dict[str, Any]:
+    """Build a single benchmark result row."""
+    return {
+        "dataset": name,
+        "n_inserted": inserted_count,
+        "insert_time_sec": timing_metrics["insert_time_sec"],
+        "present_search_time_sec": timing_metrics["present_search_time_sec"],
+        "absent_search_time_sec": absent_metrics["absent_search_time_sec"],
+        "observed_false_positive_rate": absent_metrics[
+            "observed_false_positive_rate"
+        ],
+        "theoretical_false_positive_rate": filter_metrics[
+            "theoretical_false_positive_rate"
+        ],
+        "memory_bytes": filter_metrics["memory_bytes"],
+        "fill_ratio": filter_metrics["fill_ratio"],
+        "bits_per_item": filter_metrics["bits_per_item"],
+    }
+
+
+def _benchmark_step(
+    bloom_filter: BloomFilter,
+    name: str,
+    dataset_parts: Dict[str, Any],
+    step: int,
+) -> Tuple[Dict[str, Any], int]:
+    """Run one benchmark step and return the result row and
+    the new insertion index."""
+    inserted = dataset_parts["inserted"]
+    negatives = dataset_parts["negatives"]
+    inserted_so_far = dataset_parts["inserted_so_far"]
+
+    new_items = inserted[inserted_so_far:step]
+    present_items = inserted[:step]
+
+    timing_metrics = {
+        "insert_time_sec": _time_insertions(bloom_filter, new_items),
+        "present_search_time_sec": _time_present_searches(
+            bloom_filter, present_items
+        ),
+    }
+    absent_metrics = _measure_absent_searches(bloom_filter, negatives)
+    filter_metrics = _collect_filter_metrics(bloom_filter, step)
+
+    dataset_parts["inserted_so_far"] = step
+
+    result_row = _build_result_row(
+        name,
+        step,
+        timing_metrics,
+        absent_metrics,
+        filter_metrics,
+    )
+    return result_row, step
 
 
 def benchmark_dataset(
     name: str, data: List[str], expected_items: int = 100000, fpr: float = 0.01
 ) -> List[Dict[str, Any]]:
-    bf = BloomFilter(expected_items, fpr)
-
-    steps = [1000, 5000, 10000, 25000, 50000, 100000]
+    """Benchmark Bloom filter performance on a dataset."""
+    bloom_filter = BloomFilter(expected_items, fpr)
     results: List[Dict[str, Any]] = []
+    inserted, negatives = _prepare_dataset_slices(data)
+    dataset_parts: Dict[str, Any] = {
+        "inserted": inserted,
+        "negatives": negatives,
+        "inserted_so_far": 0,
+    }
 
-    max_n = max(steps)
-    data = data[: max_n * 2]
-
-    inserted = data[:max_n]
-    negatives = data[max_n: max_n * 2]
-
-    inserted_so_far = 0
-
-    for n in steps:
-        to_insert = inserted[inserted_so_far:n]
-
-        start = time.perf_counter()
-        for item in to_insert:
-            bf.add(item)
-        insert_time = time.perf_counter() - start
-
-        inserted_so_far = n
-
-        start = time.perf_counter()
-        for item in inserted[:n]:
-            _ = bf.contains(item)
-        search_present_time = time.perf_counter() - start
-
-        false_positives = 0
-        start = time.perf_counter()
-        for item in negatives:
-            if bf.contains(item):
-                false_positives += 1
-        search_absent_time = time.perf_counter() - start
-
-        observed_fpr = false_positives / len(negatives)
-        theoretical_fpr = bf.theoretical_false_positive_rate()
-
-        results.append(
-            {
-                "dataset": name,
-                "n_inserted": n,
-                "insert_time_sec": insert_time,
-                "present_search_time_sec": search_present_time,
-                "absent_search_time_sec": search_absent_time,
-                "observed_false_positive_rate": observed_fpr,
-                "theoretical_false_positive_rate": theoretical_fpr,
-                "memory_bytes": bf.memory_bytes(),
-                "fill_ratio": bf.fill_ratio(),
-                "bits_per_item": bf.m / n,
-            }
+    for step in BENCHMARK_STEPS:
+        result_row, _ = _benchmark_step(
+            bloom_filter=bloom_filter,
+            name=name,
+            dataset_parts=dataset_parts,
+            step=step,
         )
+        results.append(result_row)
 
     return results
 
 
 def save_results(path: Path, values: List[Dict[str, Any]]) -> None:
-    with open(path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=values[0].keys())
+    """Save benchmark results to a CSV file."""
+    with path.open("w", newline="", encoding="utf-8") as file_handle:
+        writer = csv.DictWriter(file_handle, fieldnames=values[0].keys())
         writer.writeheader()
         writer.writerows(values)
 
 
 if __name__ == "__main__":
-    HERE = Path(__file__).resolve()
-    PROJECT_ROOT = HERE.parent.parent
+    here = Path(__file__).resolve()
+    project_root = here.parent.parent
 
-    random.seed(42)
+    random.seed(RANDOM_SEED)
 
-    random_data = load_data(PROJECT_ROOT / "data/random_strings.txt")
-    dna_data = load_data(PROJECT_ROOT / "data/dna_sequences.txt")
+    random_data = load_data(project_root / "data/random_strings.txt")
+    dna_data = load_data(project_root / "data/dna_sequences.txt")
 
     rows: List[Dict[str, Any]] = []
     rows.extend(benchmark_dataset("random", random_data))
     rows.extend(benchmark_dataset("dna", dna_data))
 
-    save_results(PROJECT_ROOT / "results/benchmark_results.csv", rows)
+    save_results(project_root / "results/benchmark_results.csv", rows)
 
     print("Benchmark done.")
