@@ -132,7 +132,7 @@ def _benchmark_step(
             bloom_filter, present_items
         ),
     }
-    absent_metrics = _measure_absent_searches(bloom_filter, negatives)
+    absent_metrics = _measure_absent_searches(bloom_filter, negatives[:step])
     filter_metrics = _collect_filter_metrics(bloom_filter, step)
 
     dataset_parts["inserted_so_far"] = step
