@@ -7,9 +7,10 @@ import math
 
 
 class BloomFilter:
-    """A Bloom Filter is a space-efficient probabilistic data structure
-      used to test whether an element is a member of a set. It can have
-        false positives but no false negatives."""
+    """A Bloom Filter is a space-efficient probabilistic data structure used
+    to test whether an element is a member of a set. It can't have any false
+    negatives, but to get this space reduction false positives need to be
+    tolerated."""
     def __init__(
         self, expected_items: int, false_positive_rate: float
     ) -> None:
@@ -86,5 +87,6 @@ class BloomFilter:
         return len(self.bit_array)
 
     def theoretical_false_positive_rate(self) -> float:
-        """Calculates the theoretical false positive rate based on current count."""
+        """Calculates the theoretical false positive rate
+        based on current count."""
         return (1 - math.exp(-self.k * self.count / self.m)) ** self.k
