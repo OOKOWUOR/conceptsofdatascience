@@ -11,6 +11,7 @@ class BloomFilter:
     to test whether an element is a member of a set. It can't have any false
     negatives, but to get this space reduction false positives need to be
     tolerated."""
+
     def __init__(
         self, expected_items: int, false_positive_rate: float
     ) -> None:
@@ -19,16 +20,46 @@ class BloomFilter:
         if not 0 < false_positive_rate < 1:
             raise ValueError("false_positive_rate must be between 0 and 1")
 
-        self.expected_items = expected_items
-        self.false_positive_rate = false_positive_rate
+        self._expected_items = expected_items
+        self._false_positive_rate = false_positive_rate
 
-        self.m = self._optimal_bit_array_size(
+        self._m = self._optimal_bit_array_size(
             expected_items, false_positive_rate
         )
-        self.k = self._optimal_hash_count(self.m, expected_items)
+        self._k = self._optimal_hash_count(self.m, expected_items)
 
-        self.bit_array = bytearray(math.ceil(self.m / 8))
-        self.count = 0
+        self._bit_array = bytearray(math.ceil(self.m / 8))
+        self._count = 0
+
+    @property
+    def expected_items(self):
+        """Getter for expected_items"""
+        return self._expected_items
+
+    @property
+    def false_positive_rate(self):
+        """Getter for false_positive_rate"""
+        return self._false_positive_rate
+
+    @property
+    def m(self):
+        """Getter for m"""
+        return self._m
+
+    @property
+    def k(self):
+        """Getter for k"""
+        return self._k
+
+    @property
+    def bit_array(self):
+        """Getter for bit_array"""
+        return self._bit_array
+
+    @property
+    def count(self):
+        """Getter for count"""
+        return self._count
 
     @staticmethod
     def _optimal_bit_array_size(n: int, p: float) -> int:
@@ -54,7 +85,7 @@ class BloomFilter:
     def _set_bit(self, index: int) -> None:
         byte_index = index // 8
         bit_index = index % 8
-        self.bit_array[byte_index] |= 1 << bit_index
+        self._bit_array[byte_index] |= 1 << bit_index
 
     def _get_bit(self, index: int) -> int:
         """Returns 1 if the bit at index is set, else 0."""
@@ -66,11 +97,11 @@ class BloomFilter:
         """Adds an item to the Bloom Filter."""
         for position in self._hashes(item):
             self._set_bit(position)
-        self.count += 1
+        self._count += 1
 
     def __contains__(self, item: str) -> bool:
         """Checks if an item is in the Bloom Filter.
-          Returns True if it might be present."""
+        Returns True if it might be present."""
         return all(self._get_bit(position) for position in self._hashes(item))
 
     def contains(self, item: str) -> bool:
