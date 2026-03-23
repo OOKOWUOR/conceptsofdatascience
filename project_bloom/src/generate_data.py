@@ -1,5 +1,6 @@
 # generate_data.py
-"""Utility script to generate datasets for benchmarking the Bloom filter implementation."""
+"""Utility script to generate datasets for benchmarking
+the Bloom filter implementation."""
 import random
 import string
 from pathlib import Path
