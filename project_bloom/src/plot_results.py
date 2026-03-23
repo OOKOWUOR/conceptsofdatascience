@@ -24,34 +24,83 @@ def make_plot(
     plt.close()
 
 
-if __name__ == "__main__":
-    HERE = Path(__file__).resolve()
-    PROJECT_ROOT = HERE.parent.parent
+def plot_averages(
+    df: pd.DataFrame, x: str, y: str, title: str, outPath: Path
+) -> None:
+    """Generate and save a line plot of average values."""
+    avg = "avg_" + y
+    df[avg] = df[y] / df[x]
+    make_plot(df, x, avg, title, outPath)
 
-    data = pd.read_csv(PROJECT_ROOT / "results/benchmark_results.csv")
+
+def plot_totals(
+    df: pd.DataFrame, x: str, y: str, title: str, outPath: Path
+) -> None:
+    """Generate and save a line plot of total values from averages."""
+    if y == "bits_per_item":
+        tot = "total_storage (bits)"
+    else:
+        tot = "total_of_" + y
+    df[tot] = df[y] * df[x]
+    make_plot(df, x, tot, title, outPath)
+
+
+if __name__ == "__main__":
+    here = Path(__file__).resolve()
+    project_root = here.parent.parent
+
+    data = pd.read_csv(project_root / "results/benchmark_results.csv")
 
     make_plot(
         data,
         "n_inserted",
         "insert_time_sec",
-        "Insertion time vs inserted items",
-        PROJECT_ROOT / "results/insert_time.png",
+        "Total insertion time (sec) vs inserted items",
+        project_root / "results/total_insert_time.png",
+    )
+
+    plot_averages(
+        data,
+        "n_inserted",
+        "insert_time_sec",
+        "Average insertion time (sec) vs inserted items",
+        project_root / "results/avg_insert_time.png",
     )
 
     make_plot(
         data,
         "n_inserted",
         "present_search_time_sec",
-        "Lookup time (present) vs inserted items",
-        PROJECT_ROOT / "results/search_present_time.png",
+        "Total lookup time (present) (sec) vs searched items\n"
+        + "(# searched items = # inserted items)",
+        project_root / "results/total_search_present_time.png",
+    )
+
+    plot_averages(
+        data,
+        "n_inserted",
+        "present_search_time_sec",
+        "Average lookup time (present) (sec) vs searched items\n"
+        + "(# searched items = # inserted items)",
+        project_root / "results/avg_search_present_time.png",
     )
 
     make_plot(
         data,
         "n_inserted",
         "absent_search_time_sec",
-        "Lookup time (absent) vs inserted items",
-        PROJECT_ROOT / "results/search_absent_time.png",
+        "Total lookup time (absent) (sec) vs searched items\n"
+        + "(# searched items = # inserted items)",
+        project_root / "results/total_search_absent_time.png",
+    )
+
+    plot_averages(
+        data,
+        "n_inserted",
+        "absent_search_time_sec",
+        "Average lookup time (absent) (sec) vs searched items\n"
+        + "(# searched items = # inserted items)",
+        project_root / "results/avg_search_absent_time.png",
     )
 
     make_plot(
@@ -59,7 +108,7 @@ if __name__ == "__main__":
         "n_inserted",
         "observed_false_positive_rate",
         "Observed false positive rate vs inserted items",
-        PROJECT_ROOT / "results/observed_fpr.png",
+        project_root / "results/observed_fpr.png",
     )
 
     make_plot(
@@ -67,15 +116,23 @@ if __name__ == "__main__":
         "n_inserted",
         "theoretical_false_positive_rate",
         "Theoretical false positive rate vs inserted items",
-        PROJECT_ROOT / "results/theoretical_fpr.png",
+        project_root / "results/theoretical_fpr.png",
     )
 
     make_plot(
         data,
         "n_inserted",
         "bits_per_item",
-        "Bits per item vs inserted items",
-        PROJECT_ROOT / "results/bits_per_item.png",
+        "Average used bits per item vs inserted items",
+        project_root / "results/used_bits_per_item.png",
+    )
+
+    plot_totals(
+        data,
+        "n_inserted",
+        "bits_per_item",
+        "Total storage in bits vs inserted items",
+        project_root / "results/total_storage.png",
     )
 
     print("Plots saved in results/.")
