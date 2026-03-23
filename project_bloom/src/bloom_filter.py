@@ -1,5 +1,5 @@
 # bloom_filter.py
-
+"""A simple Bloom Filter implementation in Python."""
 from __future__ import annotations
 
 import hashlib
@@ -7,6 +7,10 @@ import math
 
 
 class BloomFilter:
+    """A Bloom Filter is a space-efficient probabilistic data structure used
+    to test whether an element is a member of a set. It can't have any false
+    negatives, but to get this space reduction false positives need to be
+    tolerated."""
     def __init__(
         self, expected_items: int, false_positive_rate: float
     ) -> None:
@@ -53,27 +57,36 @@ class BloomFilter:
         self.bit_array[byte_index] |= 1 << bit_index
 
     def _get_bit(self, index: int) -> int:
+        """Returns 1 if the bit at index is set, else 0."""
         byte_index = index // 8
         bit_index = index % 8
         return (self.bit_array[byte_index] >> bit_index) & 1
 
     def add(self, item: str) -> None:
+        """Adds an item to the Bloom Filter."""
         for position in self._hashes(item):
             self._set_bit(position)
         self.count += 1
 
     def __contains__(self, item: str) -> bool:
+        """Checks if an item is in the Bloom Filter.
+          Returns True if it might be present."""
         return all(self._get_bit(position) for position in self._hashes(item))
 
     def contains(self, item: str) -> bool:
+        """Alias for __contains__ to allow method call style."""
         return item in self
 
     def fill_ratio(self) -> float:
+        """Returns the ratio of bits set to total bits."""
         ones = sum(bin(byte).count("1") for byte in self.bit_array)
         return ones / self.m
 
     def memory_bytes(self) -> int:
+        """Returns the memory usage of the Bloom Filter in bytes."""
         return len(self.bit_array)
 
     def theoretical_false_positive_rate(self) -> float:
+        """Calculates the theoretical false positive rate
+        based on current count."""
         return (1 - math.exp(-self.k * self.count / self.m)) ** self.k
