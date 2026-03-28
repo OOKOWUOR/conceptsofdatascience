@@ -31,7 +31,7 @@ def _prepare_dataset_slices(
             )
         )
     inserted = list(data[:max_n])
-    negatives = list(data[max_n:max_n * 2])
+    negatives = list(data[max_n : max_n * 2])
     return inserted, negatives
 
 
@@ -83,7 +83,7 @@ def _build_result_row(
     absent_metrics: Dict[str, float],
     filter_metrics: Dict[str, float],
     expected_items: int,
-    desired_false_positive_rate: float
+    desired_false_positive_rate: float,
 ) -> Dict[str, Any]:
     """Build a single benchmark result row."""
     return {
@@ -194,16 +194,22 @@ if __name__ == "__main__":
 
     rows: List[Dict[str, Any]] = []
     rows.extend(benchmark_dataset("random", random_data))
-    rows.extend(benchmark_dataset("random", random_data, expected_items=500000))
-    rows.extend(benchmark_dataset("random", random_data, expected_items=1000000))
-    rows.extend(benchmark_dataset("random", random_data, expected_items=5000000))
+    rows.extend(
+        benchmark_dataset("random", random_data, expected_items=125000)
+    )
+    rows.extend(
+        benchmark_dataset("random", random_data, expected_items=150000)
+    )
+    rows.extend(
+        benchmark_dataset("random", random_data, expected_items=200000)
+    )
     rows.extend(benchmark_dataset("dna", random_data))
-    rows.extend(benchmark_dataset("dna", random_data, expected_items=500000))
-    rows.extend(benchmark_dataset("dna", random_data, expected_items=1000000))
-    rows.extend(benchmark_dataset("dna", random_data, expected_items=5000000))
+    rows.extend(benchmark_dataset("dna", random_data, expected_items=125000))
+    rows.extend(benchmark_dataset("dna", random_data, expected_items=150000))
+    rows.extend(benchmark_dataset("dna", random_data, expected_items=200000))
 
     save_results(project_root / "results/benchmark_expected_items.csv", rows)
-    
+
     rows: List[Dict[str, Any]] = []
     rows.extend(benchmark_dataset("random", random_data))
     rows.extend(benchmark_dataset("random", random_data, fpr=0.05))
