@@ -131,7 +131,7 @@ if __name__ == "__main__":
         data,
         "n_inserted",
         "bits_per_item",
-        "Average used bits per item vs inserted items",
+        "Compression rate: average used bits per item vs inserted items",
         project_root / "results/used_bits_per_item.png",
     )
 

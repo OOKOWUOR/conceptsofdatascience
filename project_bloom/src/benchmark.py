@@ -82,6 +82,8 @@ def _build_result_row(
     present_metrics: Dict[str, float],
     absent_metrics: Dict[str, float],
     filter_metrics: Dict[str, float],
+    expected_items: int,
+    desired_false_positive_rate: float
 ) -> Dict[str, Any]:
     """Build a single benchmark result row."""
     return {
@@ -100,6 +102,8 @@ def _build_result_row(
         "memory_bytes": filter_metrics["memory_bytes"],
         "fill_ratio": filter_metrics["fill_ratio"],
         "bits_per_item": filter_metrics["bits_per_item"],
+        "expected_items": expected_items,
+        "desired_false_positive_rate": desired_false_positive_rate,
     }
 
 
@@ -134,6 +138,8 @@ def _benchmark_step(
         present_metrics,
         absent_metrics,
         filter_metrics,
+        bloom_filter.expected_items,
+        bloom_filter.false_positive_rate,
     )
     return result_row, step
 
@@ -185,5 +191,29 @@ if __name__ == "__main__":
     rows.extend(benchmark_dataset("dna", dna_data))
 
     save_results(project_root / "results/benchmark_results.csv", rows)
+
+    rows: List[Dict[str, Any]] = []
+    rows.extend(benchmark_dataset("random", random_data))
+    rows.extend(benchmark_dataset("random", random_data, expected_items=500000))
+    rows.extend(benchmark_dataset("random", random_data, expected_items=1000000))
+    rows.extend(benchmark_dataset("random", random_data, expected_items=5000000))
+    rows.extend(benchmark_dataset("dna", random_data))
+    rows.extend(benchmark_dataset("dna", random_data, expected_items=500000))
+    rows.extend(benchmark_dataset("dna", random_data, expected_items=1000000))
+    rows.extend(benchmark_dataset("dna", random_data, expected_items=5000000))
+
+    save_results(project_root / "results/benchmark_expected_items.csv", rows)
+    
+    rows: List[Dict[str, Any]] = []
+    rows.extend(benchmark_dataset("random", random_data))
+    rows.extend(benchmark_dataset("random", random_data, fpr=0.05))
+    rows.extend(benchmark_dataset("random", random_data, fpr=0.1))
+    rows.extend(benchmark_dataset("random", random_data, fpr=0.5))
+    rows.extend(benchmark_dataset("dna", random_data))
+    rows.extend(benchmark_dataset("dna", random_data, fpr=0.05))
+    rows.extend(benchmark_dataset("dna", random_data, fpr=0.1))
+    rows.extend(benchmark_dataset("dna", random_data, fpr=0.5))
+
+    save_results(project_root / "results/benchmark_expected_fpr.csv", rows)
 
     print("Benchmark done.")
