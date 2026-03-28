@@ -95,11 +95,9 @@ class BloomFilter:
 
     def add(self, item: str) -> None:
         """Adds an item to the Bloom Filter."""
-        original_ones = self._bits_set()
         for position in self._hashes(item):
             self._set_bit(position)
-        if original_ones < self._bits_set():
-            self._count += 1
+        self._count += 1
 
     def __contains__(self, item: str) -> bool:
         """Checks if an item is in the Bloom Filter.
@@ -110,13 +108,10 @@ class BloomFilter:
         """Alias for __contains__ to allow method call style."""
         return item in self
 
-    def _bits_set(self) -> int:
-        """Return the amount of bits set to 1."""
-        return sum(bin(byte).count("1") for byte in self.bit_array)
-
     def fill_ratio(self) -> float:
         """Returns the ratio of bits set to total bits."""
-        return self._bits_set() / self.m
+        ones = sum(bin(byte).count("1") for byte in self.bit_array)
+        return ones / self.m
 
     def memory_bytes(self) -> int:
         """Returns the memory usage of the Bloom Filter in bytes."""
