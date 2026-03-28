@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 
 def make_plot(
-    df: pd.DataFrame, x: str, y: str, title: str, outpath: Path
+    df: pd.DataFrame, x: str, y: str, title: str, out_path: Path
 ) -> None:
     """Generate and save a line plot for a given dataset and metrics."""
     plt.figure(figsize=(8, 5))
@@ -20,21 +20,21 @@ def make_plot(
     plt.title(title)
     plt.legend()
     plt.tight_layout()
-    plt.savefig(outpath)
+    plt.savefig(out_path)
     plt.close()
 
 
 def plot_averages(
-    df: pd.DataFrame, x: str, y: str, title: str, outPath: Path
+    df: pd.DataFrame, x: str, y: str, title: str, out_path: Path
 ) -> None:
     """Generate and save a line plot of average values."""
     avg = "avg_" + y
     df[avg] = df[y] / df[x]
-    make_plot(df, x, avg, title, outPath)
+    make_plot(df, x, avg, title, out_path)
 
 
 def plot_totals(
-    df: pd.DataFrame, x: str, y: str, title: str, outPath: Path
+    df: pd.DataFrame, x: str, y: str, title: str, out_path: Path
 ) -> None:
     """Generate and save a line plot of total values from averages."""
     if y == "bits_per_item":
@@ -42,7 +42,7 @@ def plot_totals(
     else:
         tot = "total_of_" + y
     df[tot] = df[y] * df[x]
-    make_plot(df, x, tot, title, outPath)
+    make_plot(df, x, tot, title, out_path)
 
 
 if __name__ == "__main__":
