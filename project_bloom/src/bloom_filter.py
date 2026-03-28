@@ -109,7 +109,7 @@ class BloomFilter:
     def contains(self, item: str) -> bool:
         """Alias for __contains__ to allow method call style."""
         return item in self
-    
+
     def _bits_set(self) -> int:
         """Return the amount of bits set to 1."""
         return sum(bin(byte).count("1") for byte in self.bit_array)
