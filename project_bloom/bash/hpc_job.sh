@@ -12,7 +12,9 @@ echo "Starting Bloom filter job"
 
 # Load Conda support on the cluster.
 # Adjust the module name if your HPC system uses a different one.
-module load Miniconda3
+if command -v module &> /dev/null; then
+    module load Miniconda3
+fi
 
 # Enable conda for non-interactive shells
 source "$(conda info --base)/etc/profile.d/conda.sh"
