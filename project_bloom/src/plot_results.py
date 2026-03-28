@@ -106,6 +106,14 @@ if __name__ == "__main__":
     make_plot(
         data,
         "n_inserted",
+        "false_negatives",
+        "Observed false negatives vs inserted items",
+        project_root / "results/observed_fneg.png",
+    )
+
+    make_plot(
+        data,
+        "n_inserted",
         "observed_false_positive_rate",
         "Observed false positive rate vs inserted items",
         project_root / "results/observed_fpr.png",
