@@ -58,7 +58,7 @@ class BloomFilter:
 
     @property
     def count(self):
-        """Getter for count"""
+        """Getter for the minimum amount of added elements"""
         return self._count
 
     @staticmethod
