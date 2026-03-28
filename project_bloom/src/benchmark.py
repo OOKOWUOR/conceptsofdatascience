@@ -192,7 +192,7 @@ if __name__ == "__main__":
 
     save_results(project_root / "results/benchmark_results.csv", rows)
 
-    rows: List[Dict[str, Any]] = []
+    rows.clear()
     rows.extend(benchmark_dataset("random", random_data))
     rows.extend(
         benchmark_dataset("random", random_data, expected_items=125000)
@@ -210,7 +210,7 @@ if __name__ == "__main__":
 
     save_results(project_root / "results/benchmark_expected_items.csv", rows)
 
-    rows: List[Dict[str, Any]] = []
+    rows.clear()
     rows.extend(benchmark_dataset("random", random_data))
     rows.extend(benchmark_dataset("random", random_data, fpr=0.05))
     rows.extend(benchmark_dataset("random", random_data, fpr=0.1))
