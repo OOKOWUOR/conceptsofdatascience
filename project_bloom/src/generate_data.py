@@ -8,20 +8,21 @@ from typing import List, Optional
 from enum import Enum
 
 
-class Data_type(Enum):
+class DataType(Enum):
+    """Enumerator with the possible string types."""
     ALFANUM = "alphanumeric"
     DNA = "dna_strings"
 
 
 def generate_random_strings(
-    n: int, type: Data_type, length: Optional[int] = None
+    n: int, data_type: DataType, length: Optional[int] = None
 ) -> List[str]:
     """Generate a list of random alphanumeric strings."""
-    if type == Data_type.ALFANUM:
+    if data_type == DataType.ALFANUM:
         alphabet = string.ascii_lowercase + string.digits
         if length is None:
             length = 12
-    elif type == Data_type.DNA:
+    elif data_type == DataType.DNA:
         alphabet = "ACGT"
         if length is None:
             length = 40
@@ -41,8 +42,8 @@ if __name__ == "__main__":
 
     Path("data").mkdir(exist_ok=True)
 
-    random_strings = generate_random_strings(200000, Data_type.ALFANUM)
-    dna_sequences = generate_random_strings(200000, Data_type.DNA)
+    random_strings = generate_random_strings(200000, DataType.ALFANUM)
+    dna_sequences = generate_random_strings(200000, DataType.DNA)
 
     save_lines(PROJECT_ROOT / "data/random_strings.txt", random_strings)
     save_lines(PROJECT_ROOT / "data/dna_sequences.txt", dna_sequences)
