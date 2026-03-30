@@ -20,6 +20,8 @@ fi
 source "$(conda info --base)/etc/profile.d/conda.sh"
 
 # Activate the same environment used in CI
+# The environment should be created from the pinned HPC export:
+# conda create --name CODS26 --file conda/hpc-linux-explicit.txt
 conda activate CODS26
 
 python src/generate_data.py
