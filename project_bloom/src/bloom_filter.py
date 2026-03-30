@@ -78,7 +78,6 @@ class BloomFilter:
         data = self._to_bytes(item)
         h1 = int.from_bytes(hashlib.sha256(data).digest(), byteorder="big")
         h2 = int.from_bytes(hashlib.md5(data).digest(), byteorder="big")
-        
         m = self.m
         k = self.k
         return [((h1 + i * h2) % m) for i in range(k)]
