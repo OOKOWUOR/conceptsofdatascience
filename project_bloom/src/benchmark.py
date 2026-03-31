@@ -31,7 +31,7 @@ def _prepare_dataset_slices(
             )
         )
     inserted = list(data[:max_n])
-    negatives = list(data[max_n:max_n * 2])
+    negatives = list(data[max_n : max_n * 2])
     return inserted, negatives
 
 
@@ -185,10 +185,14 @@ if __name__ == "__main__":
 
     random_data = load_data(project_root / "data/random_strings.txt")
     dna_data = load_data(project_root / "data/dna_sequences.txt")
+    words = load_data(project_root / "data/english_words.txt")
+    sentences = load_data(project_root / "data/english_sentences.txt")
 
     rows: List[Dict[str, Any]] = []
     rows.extend(benchmark_dataset("random", random_data))
     rows.extend(benchmark_dataset("dna", dna_data))
+    rows.extend(benchmark_dataset("English words", words))
+    rows.extend(benchmark_dataset("English sentences", sentences))
 
     save_results(project_root / "results/benchmark_results.csv", rows)
 
@@ -203,10 +207,36 @@ if __name__ == "__main__":
     rows.extend(
         benchmark_dataset("random", random_data, expected_items=200000)
     )
-    rows.extend(benchmark_dataset("dna", random_data))
-    rows.extend(benchmark_dataset("dna", random_data, expected_items=125000))
-    rows.extend(benchmark_dataset("dna", random_data, expected_items=150000))
-    rows.extend(benchmark_dataset("dna", random_data, expected_items=200000))
+    rows.extend(benchmark_dataset("dna", dna_data))
+    rows.extend(benchmark_dataset("dna", dna_data, expected_items=125000))
+    rows.extend(benchmark_dataset("dna", dna_data, expected_items=150000))
+    rows.extend(benchmark_dataset("dna", dna_data, expected_items=200000))
+    rows.extend(benchmark_dataset("English words", words))
+    rows.extend(
+        benchmark_dataset("English words", words, expected_items=125000)
+    )
+    rows.extend(
+        benchmark_dataset("English words", words, expected_items=150000)
+    )
+    rows.extend(
+        benchmark_dataset("English words", words, expected_items=200000)
+    )
+    rows.extend(benchmark_dataset("English sentences", sentences))
+    rows.extend(
+        benchmark_dataset(
+            "English sentences", sentences, expected_items=125000
+        )
+    )
+    rows.extend(
+        benchmark_dataset(
+            "English sentences", sentences, expected_items=150000
+        )
+    )
+    rows.extend(
+        benchmark_dataset(
+            "English sentences", sentences, expected_items=200000
+        )
+    )
 
     save_results(project_root / "results/benchmark_expected_items.csv", rows)
 
@@ -215,10 +245,18 @@ if __name__ == "__main__":
     rows.extend(benchmark_dataset("random", random_data, fpr=0.05))
     rows.extend(benchmark_dataset("random", random_data, fpr=0.1))
     rows.extend(benchmark_dataset("random", random_data, fpr=0.5))
-    rows.extend(benchmark_dataset("dna", random_data))
-    rows.extend(benchmark_dataset("dna", random_data, fpr=0.05))
-    rows.extend(benchmark_dataset("dna", random_data, fpr=0.1))
-    rows.extend(benchmark_dataset("dna", random_data, fpr=0.5))
+    rows.extend(benchmark_dataset("dna", dna_data))
+    rows.extend(benchmark_dataset("dna", dna_data, fpr=0.05))
+    rows.extend(benchmark_dataset("dna", dna_data, fpr=0.1))
+    rows.extend(benchmark_dataset("dna", dna_data, fpr=0.5))
+    rows.extend(benchmark_dataset("English words", words))
+    rows.extend(benchmark_dataset("English words", words, fpr=0.05))
+    rows.extend(benchmark_dataset("English words", words, fpr=0.1))
+    rows.extend(benchmark_dataset("English words", words, fpr=0.5))
+    rows.extend(benchmark_dataset("English sentences", sentences))
+    rows.extend(benchmark_dataset("English sentences", sentences, fpr=0.05))
+    rows.extend(benchmark_dataset("English sentences", sentences, fpr=0.1))
+    rows.extend(benchmark_dataset("English sentences", sentences, fpr=0.5))
 
     save_results(project_root / "results/benchmark_expected_fpr.csv", rows)
 
