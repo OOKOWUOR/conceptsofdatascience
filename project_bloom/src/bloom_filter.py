@@ -74,13 +74,13 @@ class BloomFilter:
         return item.encode("utf-8")
 
     def _hashes(self, item: str) -> list[int]:
+        """Generate k Bloom filter indices using double hashing."""
         data = self._to_bytes(item)
-
-        h1 = int(hashlib.sha256(data).hexdigest(), 16)
-        h2 = int(hashlib.md5(data).hexdigest(), 16)
-        hashlib.sha256()
-
-        return [((h1 + i * h2) % self.m) for i in range(self.k)]
+        h1 = int.from_bytes(hashlib.sha256(data).digest(), byteorder="big")
+        h2 = int.from_bytes(hashlib.md5(data).digest(), byteorder="big")
+        m = self.m
+        k = self.k
+        return [((h1 + i * h2) % m) for i in range(k)]
 
     def _set_bit(self, index: int) -> None:
         byte_index = index // 8
