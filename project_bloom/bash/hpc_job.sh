@@ -6,9 +6,23 @@
 #SBATCH --mem=4G
 #SBATCH --cpus-per-task=1
 
+set -euo pipefail
+
 echo "Starting Bloom filter job"
 
-module load Python/3.11.5
+# Load Conda support on the cluster.
+# Adjust the module name if your HPC system uses a different one.
+if command -v module &> /dev/null; then
+    module load Miniconda3
+fi
+
+# Enable conda for non-interactive shells
+source "$(conda info --base)/etc/profile.d/conda.sh"
+
+# Activate the same environment used in CI
+# The environment should be created from the pinned HPC export:
+# conda create --name CODS26 --file conda/hpc-linux-explicit.txt
+conda activate CODS26
 
 python src/generate_data.py
 python src/benchmark.py
