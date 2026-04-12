@@ -82,7 +82,6 @@ The actual benchmarks results are as following:
   - The observed false positive rate has almost a one on one relationship with the theoretical false positive rate. This is the case when varying the false positive rate (exp_vs_obs_fpr_by_fpr.png). With only the false positive rate of 0.5 increases a bit faster then the theoretical expected values reaching 0.5 while the theoretical value is still only at 0.4. <span style="color:red">IS THIS CORRECT OR AN ERROR IN THE CODE???</span> On the other side, if the expected amount of elements to be inserted is varied (exp_vs_obs_fpr_by_item.png), the relationship seems to be nicely one on one.
 - False negative rates
   - These stay stable at zero (observed_fneg.png).
-- <span style="color:red">ADD REFERENCES TO THE IMAGE FILE!!!</span>
 
 ### HPC benchmarking results
 ---
