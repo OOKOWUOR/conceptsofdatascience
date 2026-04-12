@@ -31,9 +31,15 @@ The actual implementation has tests written in project_bloom/tests/test_bloom_fi
 - test_size: tests the memory usage and fill ratio on insertion. This shows that with increasing inserts the fill ratio increases, but the memory usage stays stable.
 - test_repeated_inserts: tests memory usage and fill ratio on repeated inserts. This shows that our system is stable and the fill ratio (and memory usage) stays stable if the same set of elements is inserted a second time.
 - test_no_false_negatives: tests for false negatives. This shows that the basic behavior of allowing no false negatives is actually met.
-- test_false_positive_rate: test false positive rate. Here it is tested that our implementation stays under the theoretical false positive rate increased with an error margin of 5%.
+- test_false_positive_rate: test false positive rate. Here it is tested that our implementation stays under the theoretical false positive rate increased with an error margin of 5%. For this also a plot was generated for both theoretical as actual false positive rate, so that the behavior of both can be compared.
 
 ### Hashing tests
+<span style="color:red">
+-------------------------------TODO--------------------------------------------
+These hash functions should be tested to verify that they produce appropriate values.
+Note that these hash functions may work well for certain data (e.g., natural language words) but not so well for other data (e.g., random strings or DNA). Test with at least two data types.
+-------------------------------------------------------------------------------
+</span>
 
 ## 📊 Results & Discussion
 
