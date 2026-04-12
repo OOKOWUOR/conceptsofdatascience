@@ -61,11 +61,24 @@ if __name__ == "__main__":
     here = Path(__file__).resolve()
     project_root = here.parent.parent
 
-    data = pd.read_csv(project_root / "results/benchmark_results.csv")
-    exp_items = pd.read_csv(
-        project_root / "results/benchmark_expected_items.csv"
+    data = (
+        pd.read_csv(project_root / "results/benchmark_results.csv")
+        .groupby(["dataset", "n_inserted"])
+        .agg("mean")
+        .reset_index()
     )
-    exp_fpr = pd.read_csv(project_root / "results/benchmark_expected_fpr.csv")
+    exp_items = (
+        pd.read_csv(project_root / "results/benchmark_expected_items.csv")
+        .groupby(["dataset", "n_inserted"])
+        .agg("mean")
+        .reset_index()
+    )
+    exp_fpr = (
+        pd.read_csv(project_root / "results/benchmark_expected_fpr.csv")
+        .groupby(["dataset", "n_inserted"])
+        .agg("mean")
+        .reset_index()
+    )
 
     make_plot(
         data,
