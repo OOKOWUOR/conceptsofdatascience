@@ -53,30 +53,35 @@ Note that these hash functions may work well for certain data (e.g., natural lan
 - Performance is similar across datasets, but slight differences may occur due to hash distribution. This is especially visible when larger elements (such as sentences instead of words) are being hashed.
 
 ### Local benchmarking results
+The benchmarking was done for different amount of insertions and bloom filters defined with different parameters (expected insertion amount and expected false positive rates). Each combination was then run 10 times for which the average value was taken. This was done for four different data types: random alpha numeric strings, short DNA sequences, English words and finally English sentences. For the last two the Natural Language Toolkit (NLTK) (Bird et al., 2009) was used with most of the contained databases:
+- The contained words set was used for the English words
+- gutenberg, brown, reuters, inaugural, webtext and nps_chat were used for the English sentences
+
+The actual benchmarks results are as following:
 - Insertion time
   - We see that the insertion time quite stable is and linearly increases with insertions for all data types. The data type itself does not seem to matter a lot, but the length of the data type determines the hashing time and thus the insertion time as well.
-  - A total insertion time of about 0.3 seconds is recorded when inserting 100.000 elements and increases quite stable. There is a bit of fluctuation at the start (steap increase followed by a slower increase, again a higher increase), but afterwards the increase is quite stable.
-  - The average insertion time tells the same story, with highest insertion times at 1000 and 5000 elements, at 10.000 it's at a stable release to increase again for 25.000 and then remain stable for the other elements. <span style="color:red">WHY???</span>
+  - A total insertion time (total_insert_time.png) of about 0.40 (or 0.50 for the sentences) seconds is recorded when inserting 100.000 elements and increases quite stable. Here the effect of the hashing functions can be seen as the dataset of English sentences has an obvious steeper slope than the other datasets.
+  - The average insertion time (avg_insert_time.png) behaves a bit unstable when inserting smaller values, but stabelizes quite nicely when increasing the amount of insertions. A small increase is noticeable, this is because the insert first checks if the element is already present before inserting. This operation takes longer when the bloom filter starts to get filled up because it will need to check all bits of the hash instead of only up to the point where the first false is generated. However, we do see that the random dataset reacts less stable then the others<span style="color:red">WHY???</span>
 - Search time
   - Absent elements:
     - The lookup time is stable and increases linearly with the amount of added data for all data types. Again, only the sentences show a higher lookup time, because the hash functions need more time to calculate the hashes of bigger strings.
-    - The total lookup time is also about 0.3 seconds when looking for 100.000 elements and increases in a nicely linear way. The actual increase depends a bit on the data type, with English sentences having a steeper slope because each lookup takes a bit longer.
-    - The average lookup time is a bit hectic at the start, but seems to stabelize when more elements were inserted. Although, we can still see an increasing trend. This is probably because the code looks untill it finds one bit that is not set and this takes longer when more insertions (more bits set to 1 that coincidentally coalide) were done. Because this is also up to chance, it might also explain the hectic behavior at the start.
+    - The total lookup time (total_search_absent_time.png) is also about 0.20 to 0.25 seconds when looking for 100.000 elements and increases in a nicely linear way. The actual increase depends a bit on the data type, with English sentences having a steeper slope because each lookup takes a bit longer.
+    - The average lookup time (avg_search_absent_time.png) is less stable at the start, but seems to stabelize when more elements were checked. Although, we can still see an increasing trend. This is probably because the code looks untill it finds one bit that is not set and this takes longer when more insertions (more bits set to 1 that coincidentally coalide) were done. Because this is also up to chance, it might also explain the hectic behavior at the start.
   - Present elements:
-    - This behaves quite similarly as the lookup time, but there are some differences
-    - For the total lookup time, it seems to take a bit longer than for the absent elements with about 0.35 seconds for 100.000 elements. Again, this is probably because it needs to check each and every result of the hash functions.
-    - Here the average lookup time is quite stable and stays more or less constant even with higher insertion values.
+    - This behaves quite similarly as the absent lookup time, but there are some differences
+    - For the total lookup time (total_search_present_time.png), it seems to take a bit longer than for the absent elements with about 0.25 to 0.30 seconds for 100.000 elements.
+    - Here the average lookup time (avg_search_present_time.png) is quite stable from 25.000 elements on and stays more or less constant even with higher insertion values. Again, only the random data set shows more variation than the other data sets.
     - <span style="color:red">ARE THE LOOKUP TIMES HECTIC AT START OR ARE THE DIFFERENCES NEGLECTIBLE???</span>
 - Storage and compression
-  - Total storage stays stable from creation, no matter how many elements are inserted.
-  - The amount of bits per item decreases logaritmically with increasing inserted elements.
-  - It can be seen that with by decreasing the desired false positive rate (or increasing the amount of expected inserts) the total memory increases right from the build of the bloom filter.
-  - It can also be seen that the compression rate (amount of bits for each element) has a logaritmic relation with the false positive rate. With the compression rate decreasing when more false positives are perceived.
+  - Total storage stays stable from creation, no matter how many elements are inserted (total_storage.png).
+  - The amount of bits per item decreases logaritmically with increasing inserted elements (used_bits_per_item.png).
+  - It can be seen that with by decreasing the desired false positive rate (or increasing the amount of expected inserts) the total memory increases right from the build of the bloom filter (elements_vs_size.png).
+  - It can also be seen that the compression rate (amount of bits for each element) has a logaritmic relation with the false positive rate. With the compression rate decreasing when more false positives are perceived (compression_vs_fpr.png).
 - False positive rates
-  - It can be seen that the observed false positive rate is quite consistent with the theoretical expectations. They stay quite stable up to 50.000 elements (expected elements 100.000 and false positive rate of 0.01) and then increasing quite steeply to 0.01 at 100.000 elements.
-  - The observed false positive rate has almost a one on one relationship with the theoretical false positive rate, but tends to increase a bit faster. This can be best seen for the expected false positive rate of 0.5 where the observed false positive rate reaches 0.5 while the theoretical value is still only at 0.4. <span style="color:red">IS THIS CORRECT OR AN ERROR IN THE CODE???</span> On the other side, if the expected amount of elements to be inserted is varied, the relationship seems to be nicely one on one.
+  - It can be seen that the observed false positive rate is quite consistent with the theoretical expectations. They stay quite stable up to 50.000 elements (expected elements 100.000 and false positive rate of 0.01) and then increasing quite steeply to 0.01 at 100.000 elements (observed_fpr.png, theoretical_fpr.png).
+  - The observed false positive rate has almost a one on one relationship with the theoretical false positive rate. This is the case when varying the false positive rate (exp_vs_obs_fpr_by_fpr.png). With only the false positive rate of 0.5 increases a bit faster then the theoretical expected values reaching 0.5 while the theoretical value is still only at 0.4. <span style="color:red">IS THIS CORRECT OR AN ERROR IN THE CODE???</span> On the other side, if the expected amount of elements to be inserted is varied (exp_vs_obs_fpr_by_item.png), the relationship seems to be nicely one on one.
 - False negative rates
-  - These stay stable at zero.
+  - These stay stable at zero (observed_fneg.png).
 - <span style="color:red">ADD REFERENCES TO THE IMAGE FILE!!!</span>
 
 ### HPC benchmarking results
