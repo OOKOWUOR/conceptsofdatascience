@@ -1,14 +1,14 @@
 # Bloom Filter Project (2025–2026)
 
 ## 📌 Overview
-This project implements a **Bloom filter**, a probabilistic data structure used for efficient membership testing with a controlled false positive rate.
+This project implements a **Bloom filter**, a probabilistic data structure used for efficient membership testing with a controlled false positive rate. The project was worked out by Silas Ooko and Saïd De Wolf.
 
 ## Consistency and reproducability
 Small and consistent commits were used to have a good log of the evolution of the producion of the project. To contain the development from the main code, all development was done in branches. Finally, a workflow was set up to check if all written tests still pass when a pull request from a branch to the main is made.
 The other action to increase consistency and reproducability is that all used conda environments were exported to .yml-files and stored in the repository. In this way they can be used to reproduce the exact environments on other systems.
 
 ## Code quality
-To make sure the code is up to a certain standard, each pull request from a branch to main needs a review from the other team member. On top of this, the workflow for the pull requests to main also include the mypy and flake8 commands to see if the code is written consistent and hold to general code conventions.
+To make sure the code is up to a certain standard, each pull request from a branch to main needs a review from the other team member. On top of this, the workflow for the pull requests to main also include the mypy and flake8 commands to see if the code is written consistent and holds to general code conventions.
 
 ---
 
@@ -23,6 +23,17 @@ To make sure the code is up to a certain standard, each pull request from a bran
   - False positive rate
   - Time performance
   - Compression efficiency
+
+## Testing
+### Implementation tests
+The actual implementation has tests written in project_bloom/tests/test_bloom_filter.py. These tests some of the basic behavior we wish to see in the bloom filter.
+- test_insert_and_lookup: tests if every inserted element can also be found. This shows that no inserted elements are lost.
+- test_size: tests the memory usage and fill ratio on insertion. This shows that with increasing inserts the fill ratio increases, but the memory usage stays stable.
+- test_repeated_inserts: tests memory usage and fill ratio on repeated inserts. This shows that our system is stable and the fill ratio (and memory usage) stays stable if the same set of elements is inserted a second time.
+- test_no_false_negatives: tests for false negatives. This shows that the basic behavior of allowing no false negatives is actually met.
+- test_false_positive_rate: test false positive rate. Here it is tested that our implementation stays under the theoretical false positive rate increased with an error margin of 5%.
+
+### Hashing tests
 
 ## 📊 Results & Discussion
 
@@ -61,6 +72,8 @@ To make sure the code is up to a certain standard, each pull request from a bran
 - False negative rates
   - These stay stable at zero.
 - <span style="color:red">ADD REFERENCES TO THE IMAGE FILE!!!</span>
+
+### HPC benchmarking results
 ---
 
 ## 📁 Project Structure
