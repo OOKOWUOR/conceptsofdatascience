@@ -3,11 +3,14 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - matplotlib
+  - pandas-stubs
+  - python=3.11.5
   - pandas
+  - flake8
+  - matplotlib
+  - mypy
   - wheel
   - setuptools
-  - pandas-stubs
   - pytest
-  - flake8
-  - mypy
+  - seaborn
+  - nltk
