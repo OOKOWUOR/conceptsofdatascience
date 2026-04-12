@@ -69,13 +69,13 @@ if __name__ == "__main__":
     )
     exp_items = (
         pd.read_csv(project_root / "results/benchmark_expected_items.csv")
-        .groupby(["dataset", "n_inserted"])
+        .groupby(["dataset", "n_inserted", "expected_items"])
         .agg("mean")
         .reset_index()
     )
     exp_fpr = (
         pd.read_csv(project_root / "results/benchmark_expected_fpr.csv")
-        .groupby(["dataset", "n_inserted"])
+        .groupby(["dataset", "n_inserted", "desired_false_positive_rate"])
         .agg("mean")
         .reset_index()
     )
