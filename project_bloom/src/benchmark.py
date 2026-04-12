@@ -31,7 +31,7 @@ def _prepare_dataset_slices(
             )
         )
     inserted = list(data[:max_n])
-    negatives = list(data[max_n:max_n * 2])
+    negatives = list(data[max_n : max_n * 2])
     return inserted, negatives
 
 
@@ -142,8 +142,10 @@ def _build_result_row(
         bloom_filter.false_positive_rate,
     )
     return result_row, step """
+
+
 def _benchmark_step(
-    expected_items: int, 
+    expected_items: int,
     fpr: float,
     name: str,
     dataset_parts: Dict[str, Any],
@@ -194,12 +196,12 @@ def benchmark_dataset(
     }
 
     for step in BENCHMARK_STEPS:
-        """ result_row, _ = _benchmark_step(
+        """result_row, _ = _benchmark_step(
             bloom_filter=bloom_filter,
             name=name,
             dataset_parts=dataset_parts,
             step=step,
-        ) """
+        )"""
         for _ in range(10):
             result_row, _ = _benchmark_step(
                 expected_items=expected_items,
