@@ -79,11 +79,6 @@ if __name__ == "__main__":
     words = generate_random_strings(200000, DataType.WORD)
     sentences = generate_random_strings(200000, DataType.SENTENCE)
 
-    print(random_strings[1:5])
-    print(dna_sequences[1:5])
-    print(words[1:5])
-    print(sentences[10:15])
-
     save_lines(PROJECT_ROOT / "data/random_strings.txt", random_strings)
     save_lines(PROJECT_ROOT / "data/dna_sequences.txt", dna_sequences)
     save_lines(PROJECT_ROOT / "data/english_words.txt", words)
