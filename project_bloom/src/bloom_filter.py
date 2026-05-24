@@ -98,7 +98,7 @@ class BloomFilter:
         if not self.__contains__(item):
             for position in self._hashes(item):
                 self._set_bit(position)
-            self._count += 1
+        self._count += 1
 
     def __contains__(self, item: str) -> bool:
         """Checks if an item is in the Bloom Filter.
