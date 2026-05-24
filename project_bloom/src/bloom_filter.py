@@ -58,7 +58,7 @@ class BloomFilter:
 
     @property
     def count(self):
-        """Getter for count"""
+        """Getter for the minimum amount of added elements"""
         return self._count
 
     @staticmethod
@@ -74,13 +74,13 @@ class BloomFilter:
         return item.encode("utf-8")
 
     def _hashes(self, item: str) -> list[int]:
+        """Generate k Bloom filter indices using double hashing."""
         data = self._to_bytes(item)
-
-        h1 = int(hashlib.sha256(data).hexdigest(), 16)
-        h2 = int(hashlib.md5(data).hexdigest(), 16)
-        hashlib.sha256()
-
-        return [((h1 + i * h2) % self.m) for i in range(self.k)]
+        h1 = int.from_bytes(hashlib.sha256(data).digest(), byteorder="big")
+        h2 = int.from_bytes(hashlib.md5(data).digest(), byteorder="big")
+        m = self.m
+        k = self.k
+        return [((h1 + i * h2) % m) for i in range(k)]
 
     def _set_bit(self, index: int) -> None:
         byte_index = index // 8
@@ -95,9 +95,10 @@ class BloomFilter:
 
     def add(self, item: str) -> None:
         """Adds an item to the Bloom Filter."""
-        for position in self._hashes(item):
-            self._set_bit(position)
-        self._count += 1
+        if not self.__contains__(item):
+            for position in self._hashes(item):
+                self._set_bit(position)
+            self._count += 1
 
     def __contains__(self, item: str) -> bool:
         """Checks if an item is in the Bloom Filter.
@@ -108,10 +109,13 @@ class BloomFilter:
         """Alias for __contains__ to allow method call style."""
         return item in self
 
+    def _bits_set(self) -> int:
+        """Return the amount of bits set to 1."""
+        return sum(bin(byte).count("1") for byte in self.bit_array)
+
     def fill_ratio(self) -> float:
         """Returns the ratio of bits set to total bits."""
-        ones = sum(bin(byte).count("1") for byte in self.bit_array)
-        return ones / self.m
+        return self._bits_set() / self.m
 
     def memory_bytes(self) -> int:
         """Returns the memory usage of the Bloom Filter in bytes."""
