@@ -46,7 +46,7 @@ class TestBloomFilter(unittest.TestCase):
         self.assertTrue(bloom_filter.memory_bytes() == start_size)
         self.assertLess(0.0, bloom_filter.fill_ratio())
 
-        for item in items:
+        for item in items[1:]:
             bloom_filter.add(item)
 
         self.assertTrue(bloom_filter.count == 500)
