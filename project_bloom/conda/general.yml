@@ -12,5 +12,7 @@ dependencies:
   - wheel
   - setuptools
   - pytest
+  - flake8
+  - mypy
   - seaborn
   - nltk
