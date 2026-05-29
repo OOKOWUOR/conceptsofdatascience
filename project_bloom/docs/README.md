@@ -104,6 +104,12 @@ Lastly, memory needs were studied under various target false positive rates and 
 These findings reveal that with higher accuracy demands, memory usage goes straight to the point of increased memory usage. Lower false positive rate filters need a much bigger bit array, whereas more relaxed accuracy goals can be attained at much less memory. This behaviour is very much in line with the theoretical design equations of Bloom filters.
 
 ## Discussion
+
+Experimental results show that the behavior of the implemented Bloom filter is consistent with the theory for each of the metrics evaluated. Above all, no negative results (false negatives) were seen in any of the experiments, verifying the correctness of the implementation. The measured false positive rates were around the theoretical predictions, further evidence that the hashing strategy and parameter selection were suitable.
+The performance measurements showed constant time for both insertion and lookup. The data structure proved to be efficient, even for processing 100 thousand elements, the operation times were in microseconds. The surprise was that the lookup results were very promising: the membership queries continued to be very fast, even with big datasets, even when data was in specific formats.
+One other significant benefit of Bloom filters came out of the memory analysis, that is fixed and predictable memory requirement. In contrast to many other traditional data structures, memory usage does not dynamically increase when adding new elements. Rather, the balance between memory consumption and accuracy trade-off during the construction of the filters can be managed using a desired target false positive rate.
+From the experiments, one interesting point is that there was very little difference in performance between English text, DNA sequences and random data. This implies that the hash functions are uniform, with no significant preference for any type of input. This implementation thus seems to be appropriate for a wide variety of real-world applications.
+
 ## Conclusion
 ## References
 - Bird, S., Klein, E., & Loper, E. (2009). Natural language processing with python. O'Reilly Media.
