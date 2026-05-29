@@ -1,5 +1,6 @@
 # plot_results.py
 """Utility script to generate plots from benchmark results."""
+
 from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -62,19 +63,21 @@ if __name__ == "__main__":
     project_root = here.parent.parent
 
     data = (
-        pd.read_csv(project_root / "results/benchmark_results.csv")
+        pd.read_csv(project_root / "results/local/benchmark_results.csv")
         .groupby(["dataset", "n_inserted"])
         .agg("mean")
         .reset_index()
     )
     exp_items = (
-        pd.read_csv(project_root / "results/benchmark_expected_items.csv")
+        pd.read_csv(
+            project_root / "results/local/benchmark_expected_items.csv"
+        )
         .groupby(["dataset", "n_inserted", "expected_items"])
         .agg("mean")
         .reset_index()
     )
     exp_fpr = (
-        pd.read_csv(project_root / "results/benchmark_expected_fpr.csv")
+        pd.read_csv(project_root / "results/local/benchmark_expected_fpr.csv")
         .groupby(["dataset", "n_inserted", "desired_false_positive_rate"])
         .agg("mean")
         .reset_index()
@@ -85,7 +88,7 @@ if __name__ == "__main__":
         "n_inserted",
         "insert_time_sec",
         "Total insertion time (sec) vs inserted items",
-        project_root / "results/total_insert_time.png",
+        project_root / "results/local/total_insert_time.png",
     )
 
     plot_averages(
@@ -93,7 +96,7 @@ if __name__ == "__main__":
         "n_inserted",
         "insert_time_sec",
         "Average insertion time (sec) vs inserted items",
-        project_root / "results/avg_insert_time.png",
+        project_root / "results/local/avg_insert_time.png",
     )
 
     make_plot(
@@ -102,7 +105,7 @@ if __name__ == "__main__":
         "present_search_time_sec",
         "Total lookup time (present) (sec) vs searched items\n"
         + "(# searched items = # inserted items)",
-        project_root / "results/total_search_present_time.png",
+        project_root / "results/local/total_search_present_time.png",
     )
 
     plot_averages(
@@ -111,7 +114,7 @@ if __name__ == "__main__":
         "present_search_time_sec",
         "Average lookup time (present) (sec) vs searched items\n"
         + "(# searched items = # inserted items)",
-        project_root / "results/avg_search_present_time.png",
+        project_root / "results/local/avg_search_present_time.png",
     )
 
     make_plot(
@@ -120,7 +123,7 @@ if __name__ == "__main__":
         "absent_search_time_sec",
         "Total lookup time (absent) (sec) vs searched items\n"
         + "(# searched items = # inserted items)",
-        project_root / "results/total_search_absent_time.png",
+        project_root / "results/local/total_search_absent_time.png",
     )
 
     plot_averages(
@@ -129,7 +132,7 @@ if __name__ == "__main__":
         "absent_search_time_sec",
         "Average lookup time (absent) (sec) vs searched items\n"
         + "(# searched items = # inserted items)",
-        project_root / "results/avg_search_absent_time.png",
+        project_root / "results/local/avg_search_absent_time.png",
     )
 
     make_plot(
@@ -137,7 +140,7 @@ if __name__ == "__main__":
         "n_inserted",
         "false_negatives",
         "Observed false negatives vs inserted items",
-        project_root / "results/observed_fneg.png",
+        project_root / "results/local/observed_fneg.png",
     )
 
     make_plot(
@@ -145,7 +148,7 @@ if __name__ == "__main__":
         "n_inserted",
         "observed_false_positive_rate",
         "Observed false positive rate vs inserted items",
-        project_root / "results/observed_fpr.png",
+        project_root / "results/local/observed_fpr.png",
     )
 
     make_plot(
@@ -153,7 +156,7 @@ if __name__ == "__main__":
         "n_inserted",
         "theoretical_false_positive_rate",
         "Theoretical false positive rate vs inserted items",
-        project_root / "results/theoretical_fpr.png",
+        project_root / "results/local/theoretical_fpr.png",
     )
 
     make_plot(
@@ -161,7 +164,7 @@ if __name__ == "__main__":
         "n_inserted",
         "bits_per_item",
         "Compression rate: average used bits per item vs inserted items",
-        project_root / "results/used_bits_per_item.png",
+        project_root / "results/local/used_bits_per_item.png",
     )
 
     plot_totals(
@@ -169,7 +172,7 @@ if __name__ == "__main__":
         "n_inserted",
         "bits_per_item",
         "Total storage in bits vs inserted items",
-        project_root / "results/total_storage.png",
+        project_root / "results/local/total_storage.png",
     )
 
     plot_compressions(
@@ -177,7 +180,7 @@ if __name__ == "__main__":
         "observed_false_positive_rate",
         "bits_per_item",
         "Compression rate vs observed false positive rate",
-        project_root / "results/compression_vs_fpr.png",
+        project_root / "results/local/compression_vs_fpr.png",
         "expected_items",
     )
 
@@ -186,7 +189,7 @@ if __name__ == "__main__":
         "n_inserted",
         "memory_bytes",
         "total memory size (Bytes) vs inserted elements",
-        project_root / "results/elements_vs_size.png",
+        project_root / "results/local/elements_vs_size.png",
         "desired_false_positive_rate",
     )
 
@@ -195,7 +198,7 @@ if __name__ == "__main__":
         "theoretical_false_positive_rate",
         "observed_false_positive_rate",
         "observed vs theoretical false positive rates",
-        project_root / "results/exp_vs_obs_fpr_by_item.png",
+        project_root / "results/local/exp_vs_obs_fpr_by_item.png",
         "expected_items",
     )
 
@@ -204,7 +207,7 @@ if __name__ == "__main__":
         "theoretical_false_positive_rate",
         "observed_false_positive_rate",
         "observed vs theoretical false positive rates",
-        project_root / "results/exp_vs_obs_fpr_by_fpr.png",
+        project_root / "results/local/exp_vs_obs_fpr_by_fpr.png",
         "desired_false_positive_rate",
     )
 
