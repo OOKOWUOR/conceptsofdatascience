@@ -34,3 +34,45 @@ The benchmark performance ensures that the Bloom filter scales effectively and i
 ## Conclusion
 This project shows how Bloom filters can be used to offer an efficient solution to speedy and memory efficient membership testing. They are not guaranteed to be accurate, but since they are highly useful because of their low memory requirements and performance in most applicable scenarios.
 This project, by implementation and experimentation, demonstrates the tradeoffs of using probabilistic data structures, especially the tradeoff between accuracy, speed, and memory consumption.
+
+## Proposed README layout (We can clean it)
+## Overview
+## Implementation
+## Correctness Testing
+## Experimental Results and Analysis
+### Correctness Verification
+
+![Observed False Negatives](../results/observed_fneg.png)
+
+### False Positive Behaviour
+
+![Observed False Positive Rate](../results/observed_fpr.png)
+![Theoretical False Positive Rate](../results/theoretical_fpr.png)
+
+![Observed vs Theoretical False Positive Rates](../results/exp_vs_obs_fpr_by_item.png)
+![Observed vs Theoretical False Positive Rates by Target Rate](../results/exp_vs_obs_fpr_by_fpr.png)
+
+### Insertion Performance
+
+![Total Insertion Time](../results/total_insert_time.png)
+![Average Insertion Time](../results/avg_insert_time.png)
+
+### Lookup Performance
+
+![Total Lookup Time for Absent Elements](../results/total_search_absent_time.png)
+![Total Lookup Time for Present Elements](../results/total_search_present_time.png)
+
+![Average Lookup Time for Absent Elements](../results/avg_search_absent_time.png)
+![Average Lookup Time for Present Elements](../results/avg_search_present_time.png)
+
+### Memory Usage and Compression Efficiency
+
+![Total Storage in Bits](../results/total_storage.png)
+![Average Bits per Item](../results/used_bits_per_item.png)
+![Compression Rate versus False Positive Rate](../results/compression_vs_fpr.png)
+![Memory Size versus Inserted Elements](../results/elements_vs_size.png)
+
+## Discussion
+## Conclusion
+## References
+- Bird, S., Klein, E., & Loper, E. (2009). Natural language processing with python. O'Reilly Media.
