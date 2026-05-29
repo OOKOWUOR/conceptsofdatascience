@@ -111,5 +111,10 @@ One other significant benefit of Bloom filters came out of the memory analysis, 
 From the experiments, one interesting point is that there was very little difference in performance between English text, DNA sequences and random data. This implies that the hash functions are uniform, with no significant preference for any type of input. This implementation thus seems to be appropriate for a wide variety of real-world applications.
 
 ## Conclusion
+
+In the end, this project was able to design, implement and test a Bloom filter in Python. The implementation has been tested with a great deal of experimentation and it is demonstrated to meet the basic properties guaranteed by a Bloom filter and it's performance and memory usage are excellent. The results were consistent with no false negative, exhibited near perfect agreement for false positive rates and insertion and lookup remained very fast even for large datasets.
+The experiments also emphasized key practical principles on which Bloom filters are useful. The probabilistic false positive rate incurred by Bloom filters is negligible, but can be tolerated, and the query time is constant. They are suited for use in large scale systems like databases, web caching, distributed storage systems, networking systems and data intensive systems.
+In general, the project shows the theory and usefulness of the probabilistic data structures. The implementation illustrates the trade-off between accuracy, performance and memory usage, which makes Bloom filters a suitable solution for large-scale membership testing problems.
+
 ## References
 - Bird, S., Klein, E., & Loper, E. (2009). Natural language processing with python. O'Reilly Media.
