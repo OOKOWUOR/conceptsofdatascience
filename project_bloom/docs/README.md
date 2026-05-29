@@ -27,7 +27,9 @@ The experimental apparatus was utilized to compare experimental behaviour with t
 ## Experimental Results and Analysis
 ### Correctness Verification
 
+The initial experiments were to confirm that the implementation did not yield any false negatives. Because Bloom filters are created to ensure that the elements inserted are never indicated as missing, a false negative would mean something is wrong with the implementation.
 ![Observed False Negatives](../results/observed_fneg.png)
+The findings indicate that the false negative count was zero and constant in all datasets and in all sizes of insertions. With either a thousand elements in the filter or a hundred thousand elements, all the items placed in the filter were all identified upon a lookup operation. This gives the confirmation that the implementation is correct, and the process of insertion and membership query were correctly implemented.
 
 ### False Positive Behaviour
 
