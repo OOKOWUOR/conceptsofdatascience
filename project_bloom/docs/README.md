@@ -28,28 +28,42 @@ The experimental apparatus was utilized to compare experimental behaviour with t
 ### Correctness Verification
 
 The initial experiments were to confirm that the implementation did not yield any false negatives. Because Bloom filters are created to ensure that the elements inserted are never indicated as missing, a false negative would mean something is wrong with the implementation.
+
 ![Observed False Negatives](../results/observed_fneg.png)
+
 The findings indicate that the false negative count was zero and constant in all datasets and in all sizes of insertions. With either a thousand elements in the filter or a hundred thousand elements, all the items placed in the filter were all identified upon a lookup operation. This gives the confirmation that the implementation is correct, and the process of insertion and membership query were correctly implemented.
 
 ### False Positive Behaviour
 
 False positives unlike false negatives are a natural property of Bloom filters. The more bits put in the filter, the more bits are occupied, and the more probable it is that a random element will happen to match all the necessary hash positions.
+
 ![Observed False Positive Rate](../results/observed_fpr.png)
 
 The false positive rate seen was very small with smaller datasets and slowly rose with the increase in population of the filter. False positives were practically zero when the number of elements to be inserted was less than fifty thousand. When the filter went to one hundred thousand elements inserted, false positive was about one percent. This is all as expected in Bloom filter theory and is a result of the growing saturation of the bit array.
 The measured values were also checked against the mathematically predicted false positive rates to establish whether implementation is as per the theory.
 
 ![Theoretical False Positive Rate](../results/theoretical_fpr.png)
+
 According to the theoretical model false positive probability will be steadily increasing with the number of elements added to the filter. The measured values were almost in line with these predictions and it is a good indication that the implementation is acting in the manner that it was predicted.
 This relationship is further demonstrated by a direct comparison of the theoretical and observed false positive rates.
+
 ![Observed vs Theoretical False Positive Rates](../results/exp_vs_obs_fpr_by_item.png)
 
 ![Observed vs Theoretical False Positive Rates by Target Rate](../results/exp_vs_obs_fpr_by_fpr.png)
+
 The near convergence between experimental and theoretical results shows that the implementation is a good model of the probabilistic behaviour of a Bloom filter. The small discrepancies may be ascribed to statistical fluctuation and limited sampling, but the general consensus is extremely high.
 ### Insertion Performance
 
+The measure of insertion performance was to record the total time in which an increasing amount of data were inserted into the filter.
+
 ![Total Insertion Time](../results/total_insert_time.png)
+
+The time of insertion was roughly proportional to the size of the number of elements inserted. At the biggest scale measured, one hundred thousand insertions took less than a second of overall run time. This illustrates the fact that the implementation is effectively scaled and is viable over large workloads.
+Average insertion time per element was also measured to gain more insight into the computational cost of individual insertions.
+
 ![Average Insertion Time](../results/avg_insert_time.png)
+
+The average cost of insertion was insignificantly dependent on dataset size, and was about six microseconds per insertion. This is not surprising since each insertion carries out a fixed number of hash calculations irrespective of the amount of elements that have already been stored inside the filter.
 
 ### Lookup Performance
 
