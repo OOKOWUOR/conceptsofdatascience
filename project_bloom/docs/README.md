@@ -14,6 +14,11 @@ The focus was made to make sure that the implementation is modular and extendibl
 The quality of hash functions used in Bloom filters is a key factor in their performance since bad hash distributions can result in a higher rate of collisions and reduced accuracy. Experiments were conducted on several classes of data with highly structured natural language text to entirely random strings to assess the strength of the implementation. This enabled the project to evaluate the ability of the selected hashing strategy to exhibit the same distribution characteristics under a wide workload.
 
 ## Correctness Testing
+
+One important correctness property of a Bloom filter is: after an element has been added, it should never be reported missing. That is, Bloom filters should not give false negatives. The assurance of this guarantee was thus among the main goals of the evaluation stage.
+The implementation was thoroughly tested with the introduction of large numbers of elements and then querying each item that was introduced. Other experiments were done with elements that were not ever inserted into the filter in order to test false positive behaviour. These tests were replicated in all categories of datasets and sizes of insertions.
+The correctness tests ensured that the Bloom filter was acting as per the expected behavior. All the inserted elements could be correctly found when looked up later, meaning that the implementation properly ensures the theoretical guarantees of the Bloom filter. These experiments provide the basis of more specific performance and accuracy studies which are discussed in the sections which follow.
+
 ## Experimental Results and Analysis
 ### Correctness Verification
 
