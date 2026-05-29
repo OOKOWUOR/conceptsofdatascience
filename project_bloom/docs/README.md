@@ -19,6 +19,11 @@ One important correctness property of a Bloom filter is: after an element has be
 The implementation was thoroughly tested with the introduction of large numbers of elements and then querying each item that was introduced. Other experiments were done with elements that were not ever inserted into the filter in order to test false positive behaviour. These tests were replicated in all categories of datasets and sizes of insertions.
 The correctness tests ensured that the Bloom filter was acting as per the expected behavior. All the inserted elements could be correctly found when looked up later, meaning that the implementation properly ensures the theoretical guarantees of the Bloom filter. These experiments provide the basis of more specific performance and accuracy studies which are discussed in the sections which follow.
 
+## Performance Evaluation
+
+The evaluation of the performance of the Bloom filter was based on increasingly larger datasets with one thousand up to one hundred thousand inserted elements. The experiments involved the use of four data sources: English sentences, English words, DNA sequences and randomly generated strings. These datasets were chosen to get the answer to the question whether various input characteristics affected performance or accuracy.
+A number of performance parameters were measured such as the insertion time, the lookup time of the existing elements, the lookup time of the missing elements, the observed false positive rate, the theoretically false positive rate, the memory consumption and the compression efficiency. Total execution times, as well as average per-operation costs were logged so as to give a complete picture of the scalability of the filter.
+The experimental apparatus was utilized to compare experimental behaviour with the theoretical predictions. This comparison is especially significant to probabilistic data structures since it shows that the implementation is a faithful reflection of the mathematical properties, on which Bloom filters are founded.
 ## Experimental Results and Analysis
 ### Correctness Verification
 
