@@ -67,11 +67,18 @@ The average cost of insertion was insignificantly dependent on dataset size, and
 
 ### Lookup Performance
 
+The most common operation that is performed on Bloom filters is membership testing, and therefore, the look up performance is of particular importance. Experiments with separate elements were done with an element that was present in the filter and with the elements that were not.
+
 ![Total Lookup Time for Absent Elements](../results/total_search_absent_time.png)
 ![Total Lookup Time for Present Elements](../results/total_search_present_time.png)
 
+The present and absent lookup operations had virtually linear scaling with the number of queries. Total execution times were very small even with a hundred thousand queries in spite of the increased workloads.
+Mean look up costs are more representative of query efficiency.
+
 ![Average Lookup Time for Absent Elements](../results/avg_search_absent_time.png)
 ![Average Lookup Time for Present Elements](../results/avg_search_present_time.png)
+
+The mean time to look up was very steady in all experiments, and was generally three to four microseconds per query. The difference in performance between types of datasets was not significant showing that the hash functions spread out values well, irrespective of the structure of the inputs. These results demonstrate one of the key benefits of Bloom filters: incredibly fast membership testing with constant-time complexity.
 
 ### Memory Usage and Compression Efficiency
 
