@@ -34,3 +34,16 @@ The benchmark performance ensures that the Bloom filter scales effectively and i
 ## Conclusion
 This project shows how Bloom filters can be used to offer an efficient solution to speedy and memory efficient membership testing. They are not guaranteed to be accurate, but since they are highly useful because of their low memory requirements and performance in most applicable scenarios.
 This project, by implementation and experimentation, demonstrates the tradeoffs of using probabilistic data structures, especially the tradeoff between accuracy, speed, and memory consumption.
+
+## Proposed README layout (We can clean it)
+## Overview
+## Implementation
+## Correctness Testing
+## Experimental Results and Analysis
+### Correctness Verification
+### False Positive Behaviour
+### Insertion Performance
+### Lookup Performance
+### Memory Usage and Compression Efficiency
+## Discussion
+## Conclusion
