@@ -82,10 +82,26 @@ The mean time to look up was very steady in all experiments, and was generally t
 
 ### Memory Usage and Compression Efficiency
 
+A key feature of Bloom filters is that they can offer approximate testing of membership and much less memory is used than for traditional set-based data structures.
+
 ![Total Storage in Bits](../results/total_storage.png)
+
+The overall storage demand was the same across the experiments since the Bloom filter assigns its bit array during initiation. Further extensions to bits do not raise memory usage. This predictable memory usage is of great value especially in large-scale systems where memory is a significant factor.
+The storage efficiency was also considered by determining the average number of bits to be stored per element.
+
 ![Average Bits per Item](../results/used_bits_per_item.png)
+
+The fewer bits per item needed decreased significantly as more elements were added to the filter. This illustrates that Bloom filters are more space-efficient as they approach their target operating capacity.
+The connection between false positive rate and compression efficiency was also explored.
+
 ![Compression Rate versus False Positive Rate](../results/compression_vs_fpr.png)
+
+The findings disclose the traditional Bloom filter trade-off between memory use and accuracy. Reduced false positive rates imply that they consume more memory in the form of larger bit arrays, and thus accept a higher probability of false positives implies smaller compression and reduced storage costs.
+Lastly, memory needs were studied under various target false positive rates and dataset sizes.
+
 ![Memory Size versus Inserted Elements](../results/elements_vs_size.png)
+
+These findings reveal that with higher accuracy demands, memory usage goes straight to the point of increased memory usage. Lower false positive rate filters need a much bigger bit array, whereas more relaxed accuracy goals can be attained at much less memory. This behaviour is very much in line with the theoretical design equations of Bloom filters.
 
 ## Discussion
 ## Conclusion
