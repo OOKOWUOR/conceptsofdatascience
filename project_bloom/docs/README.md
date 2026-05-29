@@ -1,7 +1,5 @@
 # Bloom Filter Project (2025–2026)
 
-
-## Proposed README layout (We can clean it)
 ## Overview
 
 This project outlines the design, implementation, and testing of a Bloom filter, a probabilistic data structure that is used to test data set membership. A Bloom filter, in contrast to more traditional data structures like hash tables or balanced trees, has much faster membership queries, and requires much less memory. This efficiency is achieved by sacrificing a low chance of false positives, even though false negatives are in theory impossible.
