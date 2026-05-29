@@ -74,3 +74,5 @@ This project, by implementation and experimentation, demonstrates the tradeoffs 
 
 ## Discussion
 ## Conclusion
+## References
+- Bird, S., Klein, E., & Loper, E. (2009). Natural language processing with python. O'Reilly Media.
