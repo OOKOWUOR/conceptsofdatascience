@@ -142,3 +142,4 @@ In general, the project shows the theory and usefulness of the probabilistic dat
 
 ## References
 - Bird, S., Klein, E., & Loper, E. (2009). Natural language processing with python. O'Reilly Media.
+- For sentence and grammar alignment, open AI was used.
