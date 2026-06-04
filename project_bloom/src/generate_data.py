@@ -1,6 +1,7 @@
 # generate_data.py
 """Utility script to generate datasets for benchmarking
 the Bloom filter implementation."""
+
 import random
 import string
 import nltk
@@ -9,7 +10,6 @@ from typing import List, Optional
 from enum import Enum
 from nltk import tokenize as tz
 
-
 nltk.download("punkt_tab")
 nltk.download("gutenberg")
 nltk.download("brown")
@@ -17,6 +17,8 @@ nltk.download("reuters")
 nltk.download("inaugural")
 nltk.download("webtext")
 nltk.download("nps_chat")
+
+RANDOM_SEED = 42
 
 
 class DataType(Enum):
@@ -70,18 +72,18 @@ if __name__ == "__main__":
     HERE = Path(__file__).resolve()
     PROJECT_ROOT = HERE.parent.parent
 
-    random.seed(42)
+    random.seed(RANDOM_SEED)
 
-    Path("data").mkdir(exist_ok=True)
+    Path("data/local").mkdir(exist_ok=True)
 
     random_strings = generate_random_strings(200000, DataType.ALFANUM)
     dna_sequences = generate_random_strings(200000, DataType.DNA)
     words = generate_random_strings(200000, DataType.WORD)
     sentences = generate_random_strings(200000, DataType.SENTENCE)
 
-    save_lines(PROJECT_ROOT / "data/random_strings.txt", random_strings)
-    save_lines(PROJECT_ROOT / "data/dna_sequences.txt", dna_sequences)
-    save_lines(PROJECT_ROOT / "data/english_words.txt", words)
-    save_lines(PROJECT_ROOT / "data/english_sentences.txt", sentences)
+    save_lines(PROJECT_ROOT / "data/local/random_strings.txt", random_strings)
+    save_lines(PROJECT_ROOT / "data/local/dna_sequences.txt", dna_sequences)
+    save_lines(PROJECT_ROOT / "data/local/english_words.txt", words)
+    save_lines(PROJECT_ROOT / "data/local/english_sentences.txt", sentences)
 
     print("Datasets generated.")

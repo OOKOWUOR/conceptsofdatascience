@@ -229,10 +229,10 @@ if __name__ == "__main__":
 
     random.seed(RANDOM_SEED)
 
-    random_data = load_data(project_root / "data/random_strings.txt")
-    dna_data = load_data(project_root / "data/dna_sequences.txt")
-    words = load_data(project_root / "data/english_words.txt")
-    sentences = load_data(project_root / "data/english_sentences.txt")
+    random_data = load_data(project_root / "data/local/random_strings.txt")
+    dna_data = load_data(project_root / "data/local/dna_sequences.txt")
+    words = load_data(project_root / "data/local/english_words.txt")
+    sentences = load_data(project_root / "data/local/english_sentences.txt")
 
     rows: List[Dict[str, Any]] = []
     rows.extend(benchmark_dataset("random", random_data))
@@ -240,7 +240,7 @@ if __name__ == "__main__":
     rows.extend(benchmark_dataset("English words", words))
     rows.extend(benchmark_dataset("English sentences", sentences))
 
-    save_results(project_root / "results/benchmark_results.csv", rows)
+    save_results(project_root / "results/local/benchmark_results.csv", rows)
 
     rows.clear()
     rows.extend(benchmark_dataset("random", random_data))
@@ -284,7 +284,9 @@ if __name__ == "__main__":
         )
     )
 
-    save_results(project_root / "results/benchmark_expected_items.csv", rows)
+    save_results(
+        project_root / "results/local/benchmark_expected_items.csv", rows
+    )
 
     rows.clear()
     rows.extend(benchmark_dataset("random", random_data))
@@ -304,6 +306,8 @@ if __name__ == "__main__":
     rows.extend(benchmark_dataset("English sentences", sentences, fpr=0.1))
     rows.extend(benchmark_dataset("English sentences", sentences, fpr=0.5))
 
-    save_results(project_root / "results/benchmark_expected_fpr.csv", rows)
+    save_results(
+        project_root / "results/local/benchmark_expected_fpr.csv", rows
+    )
 
     print("Benchmark done.")

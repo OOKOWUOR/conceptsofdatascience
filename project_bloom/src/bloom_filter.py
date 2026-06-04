@@ -95,9 +95,8 @@ class BloomFilter:
 
     def add(self, item: str) -> None:
         """Adds an item to the Bloom Filter."""
-        if not self.__contains__(item):
-            for position in self._hashes(item):
-                self._set_bit(position)
+        for position in self._hashes(item):
+            self._set_bit(position)
         self._count += 1
 
     def __contains__(self, item: str) -> bool:

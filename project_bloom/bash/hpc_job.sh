@@ -1,20 +1,20 @@
-#!/bin/bash
+#!/bin/bash -l
+
+#SBATCH --account=lp_h_ds_students
+#SBATCH --cluster=wice
 #SBATCH --job-name=bloom_filter
 #SBATCH --output=bloom_%j.out
 #SBATCH --error=bloom_%j.err
-#SBATCH --time=00:20:00
-#SBATCH --mem=4G
+#SBATCH --time=02:30:00
+#SBATCH --mem=5G
 #SBATCH --cpus-per-task=1
 
 set -euo pipefail
 
-echo "Starting Bloom filter job"
-
 # Load Conda support on the cluster.
 # Adjust the module name if your HPC system uses a different one.
-if command -v module &> /dev/null; then
-    module load Miniconda3
-fi
+# module load Miniconda3
+module load Miniforge3/25.3.0-3
 
 # Enable conda for non-interactive shells
 source "$(conda info --base)/etc/profile.d/conda.sh"
@@ -24,8 +24,8 @@ source "$(conda info --base)/etc/profile.d/conda.sh"
 # conda create --name CODS26 --file conda/hpc-linux-explicit.txt
 conda activate CODS26
 
-python src/generate_data.py
-python src/benchmark.py
-python src/plot_results.py
+python conceptOfDataScience/src/generate_data_hpc.py
+python conceptOfDataScience/src/benchmark_hpc.py
+python conceptOfDataScience/src/plot_results_hpc.py
 
-echo "Job finished"
+conda deactivate
