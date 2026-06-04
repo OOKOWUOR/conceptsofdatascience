@@ -117,28 +117,32 @@ The experiments also emphasized key practical principles on which Bloom filters 
 In general, the project shows the theory and usefulness of the probabilistic data structures. The implementation illustrates the trade-off between accuracy, performance and memory usage, which makes Bloom filters a suitable solution for large-scale membership testing problems.
 
 ## Folder structure
+
+```text
+.
 ├── .github/
 │   └── workflows/
-│       └── code_checks.yml (runs the checks when merging branches into main)
+│       └── code_checks.yml          # Runs checks when merging into main
 ├── project_bloom/
 │   ├── bash/
-│   │   └── hpc_job.sh (bash script for benchmarking on hpc)
+│   │   └── hpc_job.sh               # HPC benchmarking script
 │   ├── conda/
-│   │   ├── create_env.slurm (create the conda environment on hpc)
-│   │   ├── general.yml (general file for setup of conda environment)
-│   │   ├── hpc_linux.yml (specific file for setup of conda environment at hpc)
-│   │   └── windows.yml (specific file for setup of conda environment for windows pc)
+│   │   ├── create_env.slurm         # Creates Conda environment on HPC
+│   │   ├── general.yml              # General Conda environment
+│   │   ├── hpc_linux.yml            # HPC-specific Linux environment
+│   │   └── windows.yml              # Windows environment
 │   ├── data/
-│   │   ├── hpc/ (raw generated data from hpc benchmarking run, split in 2 because of GitHub size limit)
-│   │   └── local/ (raw generated data from local benchmarking run)
+│   │   ├── hpc/                     # Raw HPC benchmarking data
+│   │   └── local/                   # Raw local benchmarking data
 │   ├── results/
-│   │   ├── hpc/ (benchmarking results and plots of hpc run)
-│   │   └── local/ (benchmarking results and plots of local run)
-│   ├── src/ (files needed to build and benchmark the bloom filter both local and on hpc)
-│   ├── tests/ (files needed to test the bloomfilter)
-│   └── setup.py (setup of project)
-├── .gitignore (files to ignore when committing)
-└── README.md (introduction of the project)
+│   │   ├── hpc/                     # HPC benchmark results and plots
+│   │   └── local/                   # Local benchmark results and plots
+│   ├── src/                         # Bloom filter source code
+│   ├── tests/                       # Unit and integration tests
+│   └── setup.py                     # Project setup configuration
+├── .gitignore                       # Git ignored files
+└── README.md                        # Project documentation
+```
 
 ## References
 - Bird, S., Klein, E., & Loper, E. (2009). Natural language processing with python. O'Reilly Media.
