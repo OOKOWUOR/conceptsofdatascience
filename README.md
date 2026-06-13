@@ -1,5 +1,5 @@
 ## Contributors
-Silas Ooko - 2501260
+Silas Ooko - 2501260<br>
 Saïd De Wolf - 2503710
 
 # Bloom Filter Project (2025–2026)
